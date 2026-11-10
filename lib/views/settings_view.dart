@@ -146,9 +146,9 @@ class SettingsView extends GetView<SettingsController> {
               ),
               AppRow(
                 leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                   child: Image.asset('assets/icons/appicon.png',
-                      width: 32, height: 32),
+                      width: 40, height: 40, fit: BoxFit.cover),
                 ),
                 title: 'PhoneLM',
                 subtitle: controller.appVersion.value.isEmpty

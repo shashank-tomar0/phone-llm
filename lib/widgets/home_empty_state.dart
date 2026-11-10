@@ -188,7 +188,11 @@ class _Greeting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       if (!compact) ...[
-        Image.asset('assets/icons/appicon.png', width: 44, height: 44),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Image.asset('assets/icons/appicon.png', width: 112, height: 112,
+              fit: BoxFit.cover),
+        ),
         const SizedBox(height: 18),
       ],
       Text(
