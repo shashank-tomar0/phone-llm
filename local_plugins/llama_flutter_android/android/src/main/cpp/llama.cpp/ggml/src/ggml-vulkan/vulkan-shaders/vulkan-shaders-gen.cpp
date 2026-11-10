@@ -923,8 +923,11 @@ void process_shaders() {
 
     string_to_spv("fa_mask_opt", "flash_attn_mask_opt.comp", {});
 
-    string_to_spv("fa_decode_ph1", "flash_attn_decode_phase_1.comp", {}, true, false, false, false);
-    string_to_spv("fa_decode_ph2", "flash_attn_decode_phase_2.comp", {}, true, false, false, false);
+    // fa_decode_ph1/ph2 are coopmat-only shaders used solely by the Intel Xe
+    // fast path (ggml-org/llama.cpp#29373). Android NDK glslc has no
+    // cooperative-matrix support and no phone hits this path, so skip them.
+    // string_to_spv("fa_decode_ph1", "flash_attn_decode_phase_1.comp", {}, true, false, false, false);
+    // string_to_spv("fa_decode_ph2", "flash_attn_decode_phase_2.comp", {}, true, false, false, false);
 
     string_to_spv("fa_sparse_compact", "flash_attn_sparse_compact.comp", {});
     string_to_spv("fa_sparse_compact_subgroup", "flash_attn_sparse_compact.comp", {{"USE_SUBGROUPS", "1"}});
