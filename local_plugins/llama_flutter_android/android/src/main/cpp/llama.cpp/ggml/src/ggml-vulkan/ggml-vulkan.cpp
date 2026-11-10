@@ -2980,6 +2980,10 @@ void ggml_vk_load_shaders(vk_device& device, vk_pipeline requested) {
     ggml_vk_create_pipeline(device, device->pipeline_matmul_split_k_reduce, "split_k_reduce", split_k_reduce_len, split_k_reduce_data, "main", 2, 2 * sizeof(uint32_t), {256 * 4, 1, 1}, {}, 1);
     ggml_vk_create_pipeline(device, device->pipeline_flash_attn_split_k_reduce, "fa_split_k_reduce", fa_split_k_reduce_len, fa_split_k_reduce_data, "main", 3, sizeof(vk_op_flash_attn_split_k_reduce_push_constants), {1, device->subgroup_size, 1}, {device->subgroup_size}, 1, true);
 
+    // Upstream 4ceb17191 builds xe_fa_decode_ph* with coopmat unconditionally
+    // (ggml-org/llama.cpp#29373), which fails to link on Android NDK glslc.
+    // Guard the Intel Xe fast path on cooperative-matrix support.
+#if defined(GGML_VULKAN_COOPMAT_GLSLC_SUPPORT)
     if (device->vendor_id == VK_VENDOR_ID_INTEL && (device->architecture == INTEL_XE2 || (device->architecture == INTEL_XE1 && device->coopmat_support && device->uma))) {
         auto upper_power_of_2 = [&](uint32_t in) {
             GGML_ASSERT(in != 0);
@@ -3019,6 +3023,7 @@ void ggml_vk_load_shaders(vk_device& device, vk_pipeline requested) {
             ggml_vk_create_pipeline(device, pipelines.second, "xe_fa_decode_ph2", fa_decode_ph2_cm1_len, fa_decode_ph2_cm1_data, "main", 5, sizeof(vk_fa_xe_opt_push_constants), { 1, 1, 1 }, { group_sz_ph2, gqa_ratio, head_dim_pv, out_per_wg_ph2, xe_native_sub_group_size, split_p_per_iter_ph2, split_p_chunk, out_dim_per_wg }, 1, false, true, xe_native_sub_group_size);
         }
     }
+#endif // GGML_VULKAN_COOPMAT_GLSLC_SUPPORT
 
     for (auto &it : device->pipeline_fa_mask_opt) {
         auto BrBc = it.first;
