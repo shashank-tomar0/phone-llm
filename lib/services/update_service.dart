@@ -174,7 +174,10 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
         .toList();
     Map<String, dynamic>? pick(String abi) =>
         assets.firstWhereOrNull((a) => (a['name'] as String).contains(abi));
-    final asset = pick(_abiTag()) ?? pick('universal');
+    // ABI-matched first, then 'universal', then any single .apk — releases
+    // that ship one combined binary (e.g. app-release.apk) must still offer
+    // a direct in-app download instead of a dead-end message.
+    final asset = pick(_abiTag()) ?? pick('universal') ?? assets.firstOrNull;
     return AppRelease(
       version: _normalize(tag),
       name: (json['name'] as String?)?.trim().isNotEmpty == true

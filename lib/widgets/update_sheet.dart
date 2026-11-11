@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/ui.dart';
 import '../services/update_service.dart';
@@ -61,6 +62,12 @@ class UpdateSheet extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: MarkdownBody(
                 data: release.notes,
+                onTapLink: (text, href, title) {
+                  final url = Uri.tryParse(href ?? '');
+                  if (url != null && url.scheme.startsWith('http')) {
+                    launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                },
                 styleSheet: ChatBubble.answerStyle(context).copyWith(
                   p: t.caption.copyWith(color: t.text, height: 1.45),
                   strong: t.caption.copyWith(
@@ -94,10 +101,22 @@ class UpdateSheet extends StatelessWidget {
               icon: Icons.error_outline_rounded, color: t.red),
           const SizedBox(height: 12),
         ],
-        if (release.apkUrl == null)
+        if (release.apkUrl == null) ...[
           AppNotice(
-              'No APK for this device in the release. Download it from GitHub: ${release.pageUrl}')
-        else if (downloading) ...[
+              'No APK for this device in the release. Download it from the '
+              'releases page on GitHub.'),
+          const SizedBox(height: 12),
+          TonalButton.neutral(
+            context,
+            label: 'Open releases on GitHub',
+            onTap: () {
+              final url = Uri.tryParse(release.pageUrl);
+              if (url != null) {
+                launchUrl(url, mode: LaunchMode.externalApplication);
+              }
+            },
+          ),
+        ] else if (downloading) ...[
           AppProgressBar(
               value:
                   updates.progress.value > 0 ? updates.progress.value : null),

@@ -191,6 +191,17 @@ class AppConstants {
       'template': 'chatml',
     },
     {
+      'name': 'Qwen3 0.6B Instruct (Q4_K_M)',
+      'filename': 'qwen3-0.6b-instruct-q4_k_m.gguf',
+      'recommended': 'low_ram',
+      'url':
+          'https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf',
+      'size': '443 MB',
+      'description':
+          'Official Qwen3 instruct model — fits phones with 2–3 GB free RAM; verified chat template, proper answers',
+      'template': 'qwen3',
+    },
+    {
       'name': 'LFM2.5 1.2B Instruct (Q4_K_M)',
       'filename': 'lfm2.5-1.2b-instruct-q4_k_m.gguf',
       'recommended': 'general',
