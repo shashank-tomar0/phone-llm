@@ -654,6 +654,7 @@ object ChatTemplateManager {
         "qwen" to ChatMLTemplate(),
         "qwen2" to ChatMLTemplate(),
         "qwen2.5" to ChatMLTemplate(),
+        "qwen3" to ChatMLTemplate(),
         "command-r" to ChatMLTemplate(),
         
         // Llama family
@@ -808,6 +809,7 @@ object ChatTemplateManager {
             lowerPath.contains("deepseek") && (lowerPath.contains("v3") || lowerPath.contains("v3.1")) -> builtInTemplates["deepseek-r1"]!!
             
             // Qwen family (ChatML)
+            lowerPath.contains("qwen3") || lowerPath.contains("qwen_3") -> builtInTemplates["qwen3"]!!
             lowerPath.contains("qwen2.5") || lowerPath.contains("qwen2_5") -> builtInTemplates["qwen2.5"]!!
             lowerPath.contains("qwen2") -> builtInTemplates["qwen2"]!!
             lowerPath.contains("qwen") -> builtInTemplates["qwen"]!!
@@ -828,6 +830,9 @@ object ChatTemplateManager {
             // Other models
             lowerPath.contains("phi-3") || lowerPath.contains("phi3") -> builtInTemplates["phi-3"]!!
             lowerPath.contains("phi") -> builtInTemplates["phi"]!!
+            
+            // SmolLM (ChatML format)
+            lowerPath.contains("smollm") || lowerPath.contains("smol_lm") -> builtInTemplates["chatml"]!!
             
             // Gemma family - detect version carefully
             lowerPath.contains("gemma-4") || lowerPath.contains("gemma4") || lowerPath.contains("gemma_4") -> {

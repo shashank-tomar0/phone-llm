@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:ffi' show Abi;
 import 'dart:io' show Platform, Directory, File;
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'app_log_service.dart';
 import 'package:flutter_litert_lm/flutter_litert_lm.dart';
 import 'package:llama_flutter_android/llama_flutter_android.dart';
 
@@ -417,6 +419,16 @@ class InferenceEngine {
       print('[Inference] generateChat() started (${messages.length} messages)');
     } catch (e) {
       print('[Inference] generateChat() failed: $e — fallback to generate()');
+      try {
+        if (Get.isRegistered<AppLogService>()) {
+          Get.find<AppLogService>().warning(
+            'Chat template engine failed — fell back to raw completion',
+            details:
+                '$e\nReplies may be low quality (the model is completing text '
+                'instead of chatting). Reload the model to retry.',
+          );
+        }
+      } catch (_) {}
       try {
         await _controller!.stop();
       } catch (_) {}

@@ -115,6 +115,13 @@ class InferenceService extends GetxService {
 
       _engine = platform.InferenceEngine();
 
+      // Persist that a load is in progress. If Android's low-memory killer
+      // ends the process mid-load there is no Dart exception to catch — the
+      // app just restarts. The flag lets the next launch explain what
+      // happened instead of silently landing on the home screen.
+      await _hive.setSetting(AppConstants.keyLoadAttemptInProgress,
+          modelName ?? modelPath.split('/').last);
+
       final contextSize = _hive.getSetting<int>(
             AppConstants.keyContextSize,
             defaultValue: AppConstants.defaultContextSize,
@@ -167,6 +174,7 @@ class InferenceService extends GetxService {
         gpuName.value = '';
         gpuLayersUsed.value = 0;
         isGpuAccelerated.value = false;
+        await _hive.setSetting(AppConstants.keyLoadAttemptInProgress, '');
         Get.find<AppLogService>().error(
           'Local model load failed',
           details:
@@ -198,6 +206,7 @@ class InferenceService extends GetxService {
           AppConstants.keyLocalModelRuntime, loadedModelRuntime.value);
       await _hive.setSetting(
           AppConstants.keyLocalModelBackend, loadedBackend.value);
+      await _hive.setSetting(AppConstants.keyLoadAttemptInProgress, '');
 
       if (isLiteRt) {
         await _hive.setSetting('last_loaded_context_size', finalContextSize);
@@ -215,6 +224,7 @@ class InferenceService extends GetxService {
       loadingModelName.value = '';
       modelLoadProgress.value = 0.0;
       loadedBackend.value = '';
+      await _hive.setSetting(AppConstants.keyLoadAttemptInProgress, '');
       Get.find<AppLogService>().error('Failed to load local model', details: e);
       return 'ERROR: Failed to load model — $e';
     }

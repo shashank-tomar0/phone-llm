@@ -138,6 +138,7 @@ class ModelController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _explainPreviousLoadCrash();
     _loadCustomModels();
     availableModels.value = AppConstants.availableModels
         .map((m) => AiModel.fromMap(m))
@@ -146,6 +147,34 @@ class ModelController extends GetxController {
         .toList()
       ..addAll(customModels);
     refreshDownloaded();
+  }
+
+  /// If the previous session died while a model was loading, Android's
+  /// low-memory killer most likely ended the process. There is no crash log
+  /// to catch, so explain it on the next launch instead of a silent restart.
+  void _explainPreviousLoadCrash() {
+    final pending = _hive.getSetting<String>(
+          AppConstants.keyLoadAttemptInProgress,
+          defaultValue: '',
+        ) ??
+        '';
+    if (pending.isEmpty) return;
+    _hive.setSetting(AppConstants.keyLoadAttemptInProgress, '');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<AppLogService>().warning(
+        'App was killed while loading $pending',
+        details:
+            'Android ended the app to free memory. Try a smaller quant '
+            '(Q4) of the model, or lower the context size in Settings.',
+      );
+      showToast(
+        'Load Crashed',
+        'The app was killed while loading $pending. Try a smaller quant '
+        '(Q4) or lower the context size in Settings.',
+        tone: ToastTone.error,
+        duration: const Duration(seconds: 8),
+      );
+    });
   }
 
   void _loadCustomModels() {
@@ -896,12 +925,26 @@ class ModelController extends GetxController {
     // KV cache for the configured context, which file size alone ignores.
     final gguf = lower.endsWith('.gguf') ? await readGgufInfo(path) : null;
     final contextTokens = _settings.contextSize.value;
-    final estimatedBytes = gguf?.estimateBytes(contextTokens);
+    var estimatedBytes = gguf?.estimateBytes(contextTokens);
+    // Vulkan copies weights into GPU-resident buffers and the driver reserves
+    // staging space on top. On unified-memory phones that comes out of the
+    // same free RAM the estimate counts, so add a margin when GPU accel is on.
+    final gpuEnabled = _settings.liteRtPerformanceMode.value != 'cpu_safe';
+    if (estimatedBytes != null && gpuEnabled) {
+      estimatedBytes = (estimatedBytes * 1.25).round();
+    }
     final fits = estimatedBytes == null ||
         availableBytes <= 0 ||
         estimatedBytes <= availableBytes;
-    final fittingContext = (gguf != null && !fits && availableBytes > 0)
-        ? gguf.maxContextFitting(availableBytes)
+    // A model that passes the raw fit check but leaves almost no headroom
+    // still risks the Android low-memory killer killing the process
+    // silently. Treat a tight fit like a real warning.
+    final tightFit = fits &&
+        estimatedBytes != null &&
+        availableBytes > 0 &&
+        estimatedBytes > availableBytes * 0.8;
+    final fittingContext = ((gguf != null && !fits || tightFit) && availableBytes > 0)
+        ? gguf!.maxContextFitting((availableBytes / (gpuEnabled ? 1.25 : 1.0)).round())
         : null;
 
     final hasMeasuredMemory = availableBytes > 0 && fileBytes > 0;
@@ -913,12 +956,20 @@ class ModelController extends GetxController {
     final isLargeForRam =
         availableBytes > 0 && fileBytes > 0 && availableBytes < fileBytes * 2;
     final isLowRam = availableBytes > 0 && _isLowMemoryBytes(availableBytes);
+    // A GGUF with no chat template baked in is usually a base model: it
+    // continues text instead of answering (the classic "great job on the
+    // solution!" boilerplate).
+    final missingChatTemplate =
+        gguf != null && (gguf.chatTemplate == null || gguf.chatTemplate!.isEmpty);
     final String warning;
-    if (gguf != null && !fits) {
+    if (gguf != null && (!fits || tightFit)) {
       warning = fittingContext != null
-          ? 'This probably won\'t fit in free memory at a context of '
-              '$contextTokens tokens. A context of $fittingContext tokens '
-              'should fit.'
+          ? tightFit
+              ? 'This fits, but only barely — it may crash the app. A context '
+                  'of $fittingContext tokens leaves more headroom.'
+              : 'This probably won\'t fit in free memory at a context of '
+                  '$contextTokens tokens. A context of $fittingContext tokens '
+                  'should fit.'
           : 'This model is probably too large for the free memory on this '
               'phone, even with a small context. Try a smaller model.';
     } else if (isCriticallyLow) {
@@ -938,7 +989,7 @@ class ModelController extends GetxController {
                 ? 'Image model'
                 : 'Local model';
 
-    final warningSerious = (gguf != null && !fits) ||
+    final warningSerious = (gguf != null && (!fits || tightFit)) ||
         isCriticallyLow ||
         isLargeForRam ||
         isLowRam ||
@@ -1002,6 +1053,17 @@ class ModelController extends GetxController {
                   : Icons.info_outline_rounded,
               color: warningSerious ? t.orange : null,
             ),
+            if (missingChatTemplate) ...[
+              const SizedBox(height: 12),
+              AppNotice(
+                'This file has no chat template in its metadata — it may be a '
+                'base model. Base models continue text instead of answering '
+                '(you will get filler like "great job on the solution!"). '
+                'Download an instruct/chat version for proper replies.',
+                icon: Icons.psychology_alt_rounded,
+                color: t.orange,
+              ),
+            ],
             const SizedBox(height: 20),
             // A model is already loaded: the only choice is to swap it out.
             if (hasLoadedModel)

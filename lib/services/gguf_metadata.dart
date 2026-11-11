@@ -14,6 +14,7 @@ class GgufInfo {
   final int headCountKv;
   final int? keyLength;
   final int? valueLength;
+  final String? chatTemplate;
   final int fileBytes;
 
   const GgufInfo({
@@ -26,6 +27,7 @@ class GgufInfo {
     required this.headCountKv,
     required this.keyLength,
     required this.valueLength,
+    required this.chatTemplate,
     required this.fileBytes,
   });
 
@@ -273,6 +275,9 @@ class _GgufReader {
       headCountKv: intOf('attention.head_count_kv') ?? heads,
       keyLength: intOf('attention.key_length'),
       valueLength: intOf('attention.value_length'),
+      chatTemplate: values['tokenizer.chat_template'] is String
+          ? values['tokenizer.chat_template'] as String
+          : null,
       fileBytes: _fileLength,
     );
   }
