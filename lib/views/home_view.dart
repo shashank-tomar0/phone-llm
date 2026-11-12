@@ -8,26 +8,28 @@ import 'model_view.dart';
 import 'server_view.dart';
 import 'settings_view.dart';
 import '../core/haptics.dart';
+import '../core/reicon_paths.dart';
+import '../widgets/reicon_icon.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   static const _tabs = [
     _NavItem(
-        icon: Icons.chat_bubble_outline_rounded,
-        activeIcon: Icons.chat_bubble_rounded,
+        icon: ReiconPaths.chatOutline,
+        activeIcon: ReiconPaths.chatFilled,
         label: 'Chat'),
     _NavItem(
-        icon: Icons.layers_outlined,
-        activeIcon: Icons.layers_rounded,
+        icon: ReiconPaths.modelsOutline,
+        activeIcon: ReiconPaths.modelsFilled,
         label: 'Models'),
     _NavItem(
-        icon: Icons.lan_outlined,
-        activeIcon: Icons.lan_rounded,
+        icon: ReiconPaths.serverOutline,
+        activeIcon: ReiconPaths.serverFilled,
         label: 'Server'),
     _NavItem(
-        icon: Icons.settings_outlined,
-        activeIcon: Icons.settings,
+        icon: ReiconPaths.settingsOutline,
+        activeIcon: ReiconPaths.settingsFilled,
         label: 'Settings'),
   ];
 
@@ -113,7 +115,7 @@ class HomeView extends GetView<HomeController> {
                       children: [
                         AnimatedSwitcher(
                           duration: const Duration(milliseconds: 160),
-                          child: Icon(
+                          child: ReiconIcon(
                             current == i ? _tabs[i].activeIcon : _tabs[i].icon,
                             key: ValueKey(current == i),
                             size: 23,
@@ -177,7 +179,7 @@ class HomeView extends GetView<HomeController> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(sel ? tab.activeIcon : tab.icon,
+                            ReiconIcon(sel ? tab.activeIcon : tab.icon,
                                 color: sel ? accent : muted, size: 20),
                             const SizedBox(height: 3),
                             Text(tab.label,
@@ -201,8 +203,8 @@ class HomeView extends GetView<HomeController> {
 }
 
 class _NavItem {
-  final IconData icon;
-  final IconData activeIcon;
+  final String icon; // Reicon SVG path data (outline weight)
+  final String activeIcon; // Reicon SVG path data (filled weight)
   final String label;
   const _NavItem(
       {required this.icon, required this.activeIcon, required this.label});

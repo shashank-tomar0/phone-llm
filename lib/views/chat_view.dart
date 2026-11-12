@@ -126,10 +126,10 @@ class ChatView extends GetView<ChatController> {
           return Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Text('PhoneLM',
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                    letterSpacing: -0.5,
+                style: TextStyle(
+                    fontFamily: 'Ndot57',
+                    fontSize: 20,
+                    letterSpacing: 0.5,
                     color: text)),
           );
         }

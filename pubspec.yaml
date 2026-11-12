@@ -1,7 +1,7 @@
 name: phonellm
 description: AI Chat — Local/Cloud LLM Assistant
 publish_to: "none"
-version: 1.0.12+12
+version: 1.0.13+13
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -15,6 +15,9 @@ dependencies:
 
   # Opening external links (update release page)
   url_launcher: ^6.3.1
+
+  # SVG icon rendering (Reicon icon set)
+  flutter_svg: ^2.0.10
 
   # Persistent Storage
   hive: ^2.2.3
@@ -90,3 +93,8 @@ flutter:
     - assets/
     - assets/webgpu_engine.html
     - assets/icons/
+
+  fonts:
+    - family: Ndot57
+      fonts:
+        - asset: assets/fonts/Ndot57-Regular.otf
