@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +31,7 @@ class TaskView extends GetView<TaskController> {
                   showBack: Navigator.of(context).canPop(),
                   actions: [
                     AppBarIcon(
-                      icon: Icons.add_rounded,
+                      icon: rip.m_add_rounded,
                       tooltip: 'New task',
                       onPressed: () => _showCreateSheet(context),
                     ),
@@ -40,12 +42,12 @@ class TaskView extends GetView<TaskController> {
                   title: 'Task',
                   leading: IconButton(
                     tooltip: 'All tasks',
-                    icon: Icon(Icons.arrow_back_rounded, color: t.text),
+                    icon: ReiconIcon(rip.m_arrow_back_rounded, color: t.text),
                     onPressed: () => controller.currentTask.value = null,
                   ),
                   actions: [
                     AppBarIcon(
-                      icon: Icons.delete_outline_rounded,
+                      icon: rip.m_delete_outline_rounded,
                       tooltip: 'Delete task',
                       onPressed: controller.isExecuting.value
                           ? null
@@ -68,13 +70,13 @@ class TaskView extends GetView<TaskController> {
       return Center(
         child: SingleChildScrollView(
           child: EmptyState(
-            icon: Icons.checklist_rounded,
+            icon: rip.m_checklist_rounded,
             title: 'No tasks yet',
             message:
                 'Describe a goal and the model will plan it\ninto steps, then run them for you.',
             action: PrimaryButton(
               label: 'New task',
-              icon: Icons.add_rounded,
+              icon: rip.m_add_rounded,
               expand: false,
               onPressed: () => _showCreateSheet(context),
             ),
@@ -155,7 +157,7 @@ class TaskView extends GetView<TaskController> {
               )
             else if (steps.isEmpty)
               const EmptyState(
-                icon: Icons.format_list_bulleted_rounded,
+                icon: rip.m_format_list_bulleted_rounded,
                 title: 'No steps generated',
                 message: 'The model did not return a plan for this goal.',
               )
@@ -181,10 +183,10 @@ class TaskView extends GetView<TaskController> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: task.status == 'completed'
                 ? AppNotice('Task completed',
-                    icon: Icons.check_circle_outline_rounded, color: t.green)
+                    icon: rip.m_check_circle_outline_rounded, color: t.green)
                 : PrimaryButton(
                     label: executing ? 'Running…' : 'Run all steps',
-                    icon: Icons.play_arrow_rounded,
+                    icon: rip.m_play_arrow_rounded,
                     busy: executing,
                     onPressed: () {
                       Haptics.mediumImpact();
@@ -297,7 +299,7 @@ class _TaskRow extends GetView<TaskController> {
         color: t.red,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
+        child: const ReiconIcon(rip.m_delete_outline_rounded, color: Colors.white),
       ),
       onDismissed: (_) => controller.deleteTask(task.id),
       child: InkWell(
@@ -335,7 +337,7 @@ class _TaskRow extends GetView<TaskController> {
               ),
             ),
             const SizedBox(width: 6),
-            Icon(Icons.chevron_right_rounded, size: 20, color: t.faint),
+            ReiconIcon(rip.m_chevron_right_rounded, size: 20, color: t.faint),
           ]),
         ),
       ),
@@ -419,11 +421,11 @@ class _StepRow extends StatelessWidget {
           child: CircularProgressIndicator(strokeWidth: 2, color: t.accent),
         );
       case 'done':
-        return Icon(Icons.check_circle_rounded, size: 20, color: t.green);
+        return ReiconIcon(rip.m_check_circle_rounded, size: 20, color: t.green);
       case 'failed':
-        return Icon(Icons.error_rounded, size: 20, color: t.red);
+        return ReiconIcon(rip.m_error_rounded, size: 20, color: t.red);
       default:
-        return Icon(Icons.circle_outlined, size: 20, color: t.faint);
+        return ReiconIcon(rip.m_circle_outlined, size: 20, color: t.faint);
     }
   }
 }

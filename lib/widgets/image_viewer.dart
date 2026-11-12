@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:gal/gal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -102,7 +104,7 @@ class _ImageViewerState extends State<ImageViewer> {
                 _bytes,
                 fit: BoxFit.contain,
                 errorBuilder: (_, __, ___) => Center(
-                  child: Icon(Icons.broken_image_outlined,
+                  child: ReiconIcon(rip.m_broken_image_outlined,
                       color: Colors.white.withValues(alpha: 0.5), size: 48),
                 ),
               ),
@@ -118,20 +120,20 @@ class _ImageViewerState extends State<ImageViewer> {
                 child: Row(
                   children: [
                     _ChromeButton(
-                      icon: Icons.close_rounded,
+                      icon: rip.m_close_rounded,
                       tooltip: 'Close',
                       onTap: () => Navigator.of(context).pop(),
                     ),
                     const Spacer(),
                     _ChromeButton(
-                      icon: Icons.file_download_outlined,
+                      icon: rip.m_file_download_outlined,
                       tooltip: 'Download',
                       isLoading: _isSaving,
                       onTap: _download,
                     ),
                     const SizedBox(width: 10),
                     _ChromeButton(
-                      icon: Icons.ios_share_rounded,
+                      icon: rip.m_ios_share_rounded,
                       tooltip: 'Share',
                       isLoading: _isSharing,
                       onTap: _share,
@@ -149,7 +151,7 @@ class _ImageViewerState extends State<ImageViewer> {
 
 /// Small white icon on a subtle dark circle — floats over any image.
 class _ChromeButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String tooltip;
   final bool isLoading;
   final VoidCallback onTap;
@@ -184,7 +186,7 @@ class _ChromeButton extends StatelessWidget {
                         color: Colors.white,
                       ),
                     )
-                  : Icon(icon, color: Colors.white, size: 21),
+                  : ReiconIcon(icon, color: Colors.white, size: 21),
             ),
           ),
         ),

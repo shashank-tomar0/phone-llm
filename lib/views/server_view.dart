@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -33,14 +35,14 @@ class ServerView extends GetView<ServerController> {
 
             if (error != null) ...[
               const SizedBox(height: 12),
-              AppNotice(error, icon: Icons.error_outline_rounded, color: t.red),
+              AppNotice(error, icon: rip.m_error_outline_rounded, color: t.red),
             ],
 
             // ── Model ──
             const SectionHeader('Model'),
             AppGroup(children: [
               AppRow(
-                icon: Icons.memory_rounded,
+                icon: rip.m_memory_rounded,
                 title: controller.modelName,
                 subtitle: controller.hasLocalModel
                     ? 'Loaded on this device'
@@ -55,7 +57,7 @@ class ServerView extends GetView<ServerController> {
             const SectionHeader('Access'),
             AppGroup(children: [
               AppRow(
-                icon: Icons.lan_outlined,
+                icon: rip.m_lan_outlined,
                 title: 'Allow network access',
                 subtitle: allowNetwork
                     ? 'Reachable from other devices on your network'
@@ -67,7 +69,7 @@ class ServerView extends GetView<ServerController> {
                 ),
               ),
               AppRow(
-                icon: Icons.key_outlined,
+                icon: rip.m_key_outlined,
                 title: 'Require API key',
                 subtitle: allowNetwork
                     ? 'Always on while network access is enabled'
@@ -104,7 +106,7 @@ class ServerView extends GetView<ServerController> {
                         controller.generateApiKey();
                       },
                       icon:
-                          Icon(Icons.refresh_rounded, size: 19, color: t.muted),
+                          ReiconIcon(rip.m_refresh_rounded, size: 19, color: t.muted),
                     ),
                     _CopyButton(
                       text: hasKey ? controller.apiKey.value : null,
@@ -225,7 +227,7 @@ class _StatusHero extends StatelessWidget {
         else
           PrimaryButton(
             label: isStarting ? 'Starting…' : 'Start server',
-            icon: Icons.play_arrow_rounded,
+            icon: rip.m_play_arrow_rounded,
             busy: isStarting,
             onPressed: () {
               Haptics.mediumImpact();
@@ -284,9 +286,9 @@ class _CopyButtonState extends State<_CopyButton> {
         transitionBuilder: (child, anim) =>
             ScaleTransition(scale: anim, child: child),
         child: _copied
-            ? Icon(Icons.check_rounded,
+            ? ReiconIcon(rip.m_check_rounded,
                 key: const ValueKey('check'), size: 18, color: t.green)
-            : Icon(Icons.copy_rounded,
+            : ReiconIcon(rip.m_copy_rounded,
                 key: const ValueKey('copy'),
                 size: 17,
                 color: enabled ? t.muted : t.faint),
@@ -381,7 +383,7 @@ class _HealthTestState extends State<_HealthTest> {
       Row(children: [
         PillButton(
           label: _busy ? 'Testing…' : 'Test connection',
-          icon: Icons.network_check_rounded,
+          icon: rip.m_network_check_rounded,
           onPressed: widget.baseUrl == null || _busy ? null : _run,
         ),
         const SizedBox(width: 10),
@@ -395,8 +397,8 @@ class _HealthTestState extends State<_HealthTest> {
         AppNotice(
           _message!,
           icon: _ok == true
-              ? Icons.check_circle_outline_rounded
-              : Icons.error_outline_rounded,
+              ? rip.m_check_circle_outline_rounded
+              : rip.m_error_outline_rounded,
           color: _ok == true ? t.green : t.red,
         ),
       ],

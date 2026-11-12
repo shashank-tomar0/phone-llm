@@ -5,6 +5,8 @@ import 'dart:math' as math;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:llama_flutter_android/llama_flutter_android.dart';
@@ -475,7 +477,7 @@ class ClusterService extends GetxService {
         children: [
           PrimaryButton(
             label: 'Load on this phone only',
-            icon: Icons.smartphone_rounded,
+            icon: rip.m_smartphone_rounded,
             onPressed: () => Navigator.pop(ctx, true),
           ),
           const SizedBox(height: 10),
@@ -502,7 +504,7 @@ class ClusterService extends GetxService {
         children: [
           PrimaryButton(
             label: 'Load on this phone only',
-            icon: Icons.smartphone_rounded,
+            icon: rip.m_smartphone_rounded,
             onPressed: () => Navigator.pop(ctx, false),
           ),
           const SizedBox(height: 10),

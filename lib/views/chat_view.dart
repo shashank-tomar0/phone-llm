@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -172,7 +174,7 @@ class ChatView extends GetView<ChatController> {
                               fontSize: 12.5,
                               color: Theme.of(context).hintColor)),
                     ),
-                    Icon(Icons.expand_more_rounded,
+                    ReiconIcon(rip.m_expand_more_rounded,
                         size: 16, color: Theme.of(context).hintColor),
                   ]),
                 ]),
@@ -209,7 +211,7 @@ class ChatView extends GetView<ChatController> {
           if (controller.messages.isEmpty) return const SizedBox(width: 8);
           return IconButton(
               tooltip: 'New chat',
-              icon: Icon(Icons.edit_square,
+              icon: ReiconIcon(rip.m_edit_square,
                   size: 20, color: isDark ? Colors.white : Colors.black),
               onPressed: () {
                 Haptics.selectionClick();
@@ -648,7 +650,7 @@ class ChatView extends GetView<ChatController> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.auto_awesome_rounded,
+                            ReiconIcon(rip.m_auto_awesome_rounded,
                                 size: 13, color: accent),
                             const SizedBox(width: 6),
                             Flexible(
@@ -680,7 +682,7 @@ class ChatView extends GetView<ChatController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _StepButton(
-                            icon: Icons.remove_rounded,
+                            icon: rip.m_remove_rounded,
                             enabled: steps > 1,
                             onTap: () => settings.setImageSteps(steps - 1),
                           ),
@@ -693,7 +695,7 @@ class ChatView extends GetView<ChatController> {
                             ),
                           ),
                           _StepButton(
-                            icon: Icons.add_rounded,
+                            icon: rip.m_add_rounded,
                             enabled: steps < 20,
                             onTap: () => settings.setImageSteps(steps + 1),
                           ),
@@ -720,7 +722,7 @@ class ChatView extends GetView<ChatController> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.check_circle_rounded,
+                    const ReiconIcon(rip.m_check_circle_rounded,
                         size: 18, color: Color(0xFF34C759)),
                     const SizedBox(width: 8),
                     Expanded(
@@ -749,7 +751,7 @@ class ChatView extends GetView<ChatController> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         minimumSize: const Size(0, 32),
                       ),
-                      icon: const Icon(Icons.download_rounded, size: 16),
+                      icon: const ReiconIcon(rip.m_download_rounded, size: 16, color: Colors.white),
                       label: const Text('Save All'),
                     ),
                   ],
@@ -772,7 +774,7 @@ class ChatView extends GetView<ChatController> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.layers_rounded,
+                    ReiconIcon(rip.m_layers_rounded,
                         size: 18, color: _appleBlue(context)),
                     const SizedBox(width: 8),
                     Expanded(
@@ -981,7 +983,7 @@ class ChatView extends GetView<ChatController> {
                                   _appleBlue(context).withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(Icons.add_rounded,
+                            child: ReiconIcon(rip.m_add_rounded,
                                 size: 22, color: _appleBlue(context)),
                           ),
                         ),
@@ -1000,33 +1002,33 @@ class ChatView extends GetView<ChatController> {
 
                     // Determine state
                     final Color bgColor;
-                    final IconData iconData;
+                    final String iconData;
                     final VoidCallback? onTap;
 
                     if (loading) {
                       // AI generating → solid neutral stop
                       bgColor = isDark ? Colors.white : Colors.black;
-                      iconData = Icons.stop_rounded;
+                      iconData = rip.m_stop_rounded;
                       onTap = controller.stopGenerating;
                     } else if (listening) {
                       // STT active → red stop
                       bgColor = const Color(0xFFFF3B30);
-                      iconData = Icons.stop_rounded;
+                      iconData = rip.m_stop_rounded;
                       onTap = controller.toggleListening;
                     } else if (noModel) {
                       // Nothing to talk to: inert, faded mic
                       bgColor = Colors.transparent;
-                      iconData = Icons.mic_none_rounded;
+                      iconData = rip.m_mic_none_rounded;
                       onTap = null;
                     } else if (hasContent) {
                       // Has text or attachment → blue send
                       bgColor = _appleBlue(context);
-                      iconData = Icons.arrow_upward_rounded;
+                      iconData = rip.m_arrow_upward_rounded;
                       onTap = controller.sendMessage;
                     } else {
                       // Empty → bare mic glyph
                       bgColor = Colors.transparent;
-                      iconData = Icons.mic_none_rounded;
+                      iconData = rip.m_mic_none_rounded;
                       onTap = controller.toggleListening;
                     }
 
@@ -1044,7 +1046,7 @@ class ChatView extends GetView<ChatController> {
                           duration: const Duration(milliseconds: 180),
                           transitionBuilder: (child, anim) =>
                               ScaleTransition(scale: anim, child: child),
-                          child: Icon(iconData,
+                          child: ReiconIcon(iconData,
                               key: ValueKey(iconData),
                               color: loading
                                   ? (isDark ? Colors.black : Colors.white)
@@ -1155,7 +1157,7 @@ class _AttachButton extends StatelessWidget {
         child: SizedBox(
           width: 36,
           height: 40,
-          child: Icon(Icons.add_rounded,
+          child: ReiconIcon(rip.m_add_rounded,
               color: Theme.of(buildContext)
                   .colorScheme
                   .onSurface
@@ -1177,19 +1179,19 @@ class _AttachButton extends StatelessWidget {
 
     final items = [
       (
-        icon: Icons.photo_camera_outlined,
+        icon: rip.m_photo_camera_outlined,
         label: 'Camera',
         enabled: allowMedia,
         onTap: onCamera,
       ),
       (
-        icon: Icons.photo_outlined,
+        icon: rip.m_photo_outlined,
         label: 'Photos',
         enabled: allowMedia,
         onTap: onImage,
       ),
       (
-        icon: Icons.attach_file_rounded,
+        icon: rip.m_attach_file_rounded,
         label: 'Files',
         enabled: true,
         onTap: onFile,
@@ -1254,7 +1256,7 @@ class _AttachButton extends StatelessWidget {
                                     ? Colors.white.withValues(alpha: 0.08)
                                     : Colors.black.withValues(alpha: 0.05),
                               ),
-                              child: Icon(it.icon, size: 21, color: fg),
+                              child: ReiconIcon(it.icon, size: 21, color: fg),
                             ),
                             const SizedBox(width: 14),
                             Expanded(
@@ -1344,7 +1346,7 @@ class _PulsingDotState extends State<_PulsingDot>
 }
 
 class _StepButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final bool enabled;
   final VoidCallback onTap;
 
@@ -1365,7 +1367,7 @@ class _StepButton extends StatelessWidget {
       child: SizedBox(
         width: 30,
         height: 30,
-        child: Icon(icon, size: 16, color: color),
+        child: ReiconIcon(icon, size: 16, color: color),
       ),
     );
   }
@@ -1579,7 +1581,7 @@ class _ImageGenIndicatorState extends State<_ImageGenIndicator>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.stop_rounded,
+                        const ReiconIcon(rip.m_stop_rounded,
                             size: 12, color: Color(0xFFFF3B30)),
                         const SizedBox(width: 4),
                         Text(

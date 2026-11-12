@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:llama_flutter_android/llama_flutter_android.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -64,7 +66,7 @@ class _ClusterViewState extends State<ClusterView> {
             if (role != ClusterRole.off && cluster.wifiAddress.value == null) ...[
               AppNotice(
                 'Turn on Wi-Fi. All phones in the cluster must be on the same Wi-Fi network.',
-                icon: Icons.wifi_off_rounded,
+                icon: rip.m_wifi_off_rounded,
                 color: t.orange,
               ),
               const SizedBox(height: 16),
@@ -90,7 +92,7 @@ class _ClusterViewState extends State<ClusterView> {
               : 'Help an Android phone running PhoneLM run models too big for '
                   'it alone: choose Worker, then scan this device\'s QR code '
                   'from that phone.',
-          icon: Icons.hub_outlined,
+          icon: rip.m_hub_outlined,
         ),
       ];
 
@@ -104,7 +106,7 @@ class _ClusterViewState extends State<ClusterView> {
     final Widget body;
     if (s.state == 'error') {
       body = _centered(context, [
-        Icon(Icons.error_outline_rounded, size: 40, color: t.red),
+        ReiconIcon(rip.m_error_outline_rounded, size: 40, color: t.red),
         const SizedBox(height: 12),
         Text('Worker stopped', style: t.bodyStrong),
         const SizedBox(height: 4),
@@ -164,7 +166,7 @@ class _ClusterViewState extends State<ClusterView> {
           'Android is slowing this worker down (slow cores only), which slows '
           'the whole cluster. Set PhoneLM\'s battery use to Unrestricted, '
           'then turn Worker off and on.',
-          icon: Icons.speed_rounded,
+          icon: rip.m_speed_rounded,
           color: t.orange,
         ),
         const SizedBox(height: 8),
@@ -202,14 +204,14 @@ class _ClusterViewState extends State<ClusterView> {
       ],
       PrimaryButton(
         label: 'Scan a worker\'s QR code',
-        icon: Icons.qr_code_scanner_rounded,
+        icon: rip.m_qr_code_scanner_rounded,
         onPressed: _scanQr,
       ),
       SectionHeader('Workers (${cluster.workers.length})'),
       if (cluster.workers.isEmpty)
         const AppGroup(children: [
           EmptyState(
-            icon: Icons.devices_other_rounded,
+            icon: rip.m_devices_other_rounded,
             title: 'No workers yet',
             message: 'On each other phone, open Phone cluster, choose Worker, '
                 'then scan the QR code it shows.',
@@ -219,7 +221,7 @@ class _ClusterViewState extends State<ClusterView> {
         AppGroup(dividerIndent: 60, children: [
           for (final w in cluster.workers)
             AppRow(
-              icon: Icons.smartphone_rounded,
+              icon: rip.m_smartphone_rounded,
               title: w.model ?? w.name,
               subtitle: [
                 w.endpoint,
@@ -227,7 +229,7 @@ class _ClusterViewState extends State<ClusterView> {
                 if (w.bandwidth != null) '${w.bandwidth!.toStringAsFixed(1)} GB/s',
               ].join(' · '),
               trailing: IconButton(
-                icon: Icon(Icons.close_rounded, color: t.muted),
+                icon: ReiconIcon(rip.m_close_rounded, color: t.muted),
                 tooltip: 'Remove',
                 onPressed: () => cluster.remove(w),
               ),
@@ -243,13 +245,13 @@ class _ClusterViewState extends State<ClusterView> {
       Row(children: [
         PillButton(
           label: cluster.isScanning.value ? 'Searching…' : 'Find nearby',
-          icon: Icons.wifi_find_rounded,
+          icon: rip.m_wifi_find_rounded,
           onPressed: cluster.isScanning.value ? null : cluster.scanNearby,
         ),
         const SizedBox(width: 10),
         PillButton(
           label: 'Enter IP',
-          icon: Icons.keyboard_rounded,
+          icon: rip.m_keyboard_rounded,
           onPressed: () => _enterIp(context),
         ),
       ]),
@@ -258,7 +260,7 @@ class _ClusterViewState extends State<ClusterView> {
         AppGroup(dividerIndent: 60, children: [
           for (final w in cluster.found)
             AppRow(
-              icon: Icons.smartphone_rounded,
+              icon: rip.m_smartphone_rounded,
               title: w.model ?? w.name,
               subtitle: w.endpoint,
               trailing: PillButton(
@@ -430,7 +432,7 @@ class _PulsingDotState extends State<_PulsingDot> with SingleTickerProviderState
             width: 24,
             height: 24,
             decoration: BoxDecoration(shape: BoxShape.circle, color: widget.color),
-            child: const Icon(Icons.hub_rounded, size: 14, color: Colors.white),
+            child: const ReiconIcon(rip.m_hub_rounded, size: 14, color: Colors.white),
           ),
         ]),
       ),

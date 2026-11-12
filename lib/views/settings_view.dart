@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import '../controllers/settings_controller.dart';
 import '../core/constants.dart';
@@ -39,13 +41,13 @@ class SettingsView extends GetView<SettingsController> {
             AppGroup(dividerIndent: 60, children: [
               _navRow(
                 context,
-                icon: Icons.palette_outlined,
+                icon: rip.m_palette_outlined,
                 title: 'Appearance',
                 value: _themeLabel(),
                 builder: (ctx) => _buildAppearanceGroup(ctx),
               ),
               AppRow(
-                icon: Icons.vibration_rounded,
+                icon: rip.m_vibration_rounded,
                 title: 'Haptic feedback',
                 trailing: Switch(
                   value: controller.hapticsEnabled.value,
@@ -59,7 +61,7 @@ class SettingsView extends GetView<SettingsController> {
             AppGroup(dividerIndent: 60, children: [
               _navRow(
                 context,
-                icon: Icons.memory_rounded,
+                icon: rip.m_memory_rounded,
                 title: 'Inference mode',
                 value: controller.inferenceMode.value == 'local'
                     ? 'Local'
@@ -68,7 +70,7 @@ class SettingsView extends GetView<SettingsController> {
               ),
               _navRow(
                 context,
-                icon: Icons.chat_bubble_outline_rounded,
+                icon: rip.m_chat_bubble_outline_rounded,
                 title: 'System prompt',
                 value: controller.globalSystemPrompt.value.trim().isEmpty
                     ? 'Default'
@@ -78,7 +80,7 @@ class SettingsView extends GetView<SettingsController> {
               ),
               _navRow(
                 context,
-                icon: Icons.tune_rounded,
+                icon: rip.m_tune_rounded,
                 title: 'Model parameters',
                 value: controller.temperature.value.toStringAsFixed(2),
                 builder: (ctx) => Column(
@@ -94,7 +96,7 @@ class SettingsView extends GetView<SettingsController> {
             AppGroup(dividerIndent: 60, children: [
               _navRow(
                 context,
-                icon: Icons.speed_rounded,
+                icon: rip.m_speed_rounded,
                 title: 'GGUF & LiteRT',
                 value: switch (controller.liteRtPerformanceMode.value) {
                   'gpu_fast' => 'GPU fast',
@@ -105,7 +107,7 @@ class SettingsView extends GetView<SettingsController> {
               ),
               _navRow(
                 context,
-                icon: Icons.image_outlined,
+                icon: rip.m_image_outlined,
                 title: 'Image generation',
                 value: controller.imageGenBackend.value == Backend.cpu
                     ? 'CPU'
@@ -114,7 +116,7 @@ class SettingsView extends GetView<SettingsController> {
               ),
               if (Get.isRegistered<ClusterService>())
                 AppRow(
-                  icon: Icons.hub_outlined,
+                  icon: rip.m_hub_outlined,
                   title: 'Phone cluster',
                   trailing: Text(
                       switch (Get.find<ClusterService>().role) {
@@ -132,14 +134,14 @@ class SettingsView extends GetView<SettingsController> {
               if (showUpdates) _buildUpdatesRow(context),
               _navRow(
                 context,
-                icon: Icons.smartphone_rounded,
+                icon: rip.m_smartphone_rounded,
                 title: 'Device',
                 value: '${device.totalRamGB.value.toStringAsFixed(1)} GB RAM',
                 builder: (ctx) => AppGroup(children: [_buildDeviceCard(ctx)]),
                 reactive: false,
               ),
               AppRow(
-                icon: Icons.article_outlined,
+                icon: rip.m_article_outlined,
                 title: 'Logs',
                 chevron: true,
                 onTap: () => Get.to(() => const LogView()),
@@ -166,7 +168,7 @@ class SettingsView extends GetView<SettingsController> {
   /// opens the section on its own page.
   Widget _navRow(
     BuildContext context, {
-    required IconData icon,
+    required String icon,
     required String title,
     required String value,
     required WidgetBuilder builder,
@@ -225,14 +227,14 @@ class SettingsView extends GetView<SettingsController> {
   Widget _buildInferenceGroup(BuildContext context) {
     return AppGroup(dividerIndent: 60, children: [
       AppRow(
-        icon: Icons.phone_iphone_rounded,
+        icon: rip.m_phone_iphone_rounded,
         title: 'Local (on-device)',
         subtitle: _localSubtitle(),
         selected: controller.inferenceMode.value == 'local',
         onTap: () => controller.setInferenceMode('local'),
       ),
       AppRow(
-        icon: Icons.cloud_outlined,
+        icon: rip.m_cloud_outlined,
         title: 'Cloud API',
         subtitle: providerLabel(controller),
         selected: controller.inferenceMode.value == 'cloud',
@@ -298,7 +300,7 @@ class SettingsView extends GetView<SettingsController> {
     final update = updates.availableUpdate.value;
     final downloading = updates.state.value == UpdateState.downloading;
     return AppRow(
-      icon: Icons.system_update_rounded,
+      icon: rip.m_system_update_rounded,
       title: 'App updates',
       trailing: update != null
           ? AppTag(
@@ -329,7 +331,7 @@ class SettingsView extends GetView<SettingsController> {
     }
     return AppGroup(dividerIndent: 60, children: [
       AppRow(
-        icon: update != null ? Icons.download_rounded : Icons.refresh_rounded,
+        icon: update != null ? rip.m_download_rounded : rip.m_refresh_rounded,
         title: update != null
             ? 'Update to ${update.version}'
             : 'Check for updates',
@@ -355,7 +357,7 @@ class SettingsView extends GetView<SettingsController> {
               },
       ),
       AppRow(
-        icon: Icons.schedule_rounded,
+        icon: rip.m_schedule_rounded,
         title: 'Check automatically',
         subtitle: 'Look for a new release once a day',
         trailing: Switch(
@@ -562,7 +564,7 @@ class SettingsView extends GetView<SettingsController> {
         padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            const IconBadge(Icons.smartphone_rounded),
+            const IconBadge(rip.m_smartphone_rounded),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -597,7 +599,7 @@ class SettingsView extends GetView<SettingsController> {
           if (quantWarning != null) ...[
             const SizedBox(height: 10),
             AppNotice(quantWarning,
-                icon: Icons.warning_amber_rounded, color: t.orange),
+                icon: rip.m_warning_amber_rounded, color: t.orange),
           ],
         ]),
       );
@@ -611,19 +613,19 @@ class SettingsView extends GetView<SettingsController> {
         title: 'Auto fast',
         subtitle:
             "Uses the GPU when supported, CPU if the GPU can't load the model",
-        icon: Icons.auto_awesome_outlined
+        icon: rip.m_auto_awesome_outlined
       ),
       (
         value: 'gpu_fast',
         title: 'GPU fast',
         subtitle: 'Always tries the GPU. Fastest, may crash on some devices',
-        icon: Icons.bolt_rounded
+        icon: rip.m_bolt_rounded
       ),
       (
         value: 'cpu_safe',
         title: 'CPU safe',
         subtitle: 'CPU only. Most stable, slower',
-        icon: Icons.shield_outlined
+        icon: rip.m_shield_outlined
       ),
     ];
     final t = AppTokens.of(context);
@@ -752,7 +754,7 @@ class SettingsView extends GetView<SettingsController> {
       below: [
         if (isOver)
           AppNotice(warning,
-              icon: Icons.warning_amber_rounded, color: warnColor),
+              icon: rip.m_warning_amber_rounded, color: warnColor),
       ],
     );
   }
@@ -784,7 +786,7 @@ class SettingsView extends GetView<SettingsController> {
         below: [
           if (isOver)
             AppNotice('More steps = better quality but MUCH slower!',
-                icon: Icons.warning_amber_rounded, color: t.orange),
+                icon: rip.m_warning_amber_rounded, color: t.orange),
         ],
       ),
 
@@ -817,7 +819,7 @@ class SettingsView extends GetView<SettingsController> {
             const SizedBox(height: 10),
             AppNotice(
                 '512 gives more detail but can be MUCH slower, heat the phone, and may fail on some devices.',
-                icon: Icons.warning_amber_rounded,
+                icon: rip.m_warning_amber_rounded,
                 color: t.orange),
           ],
         ]),
@@ -841,7 +843,7 @@ class SettingsView extends GetView<SettingsController> {
                 guard <= 0
                     ? 'GPU Safety is off. Large models may crash or freeze on GPU.'
                     : 'High GPU Safety allows larger models on GPU and may crash, freeze, or overheat some phones.',
-                icon: Icons.warning_amber_rounded,
+                icon: rip.m_warning_amber_rounded,
                 color: t.orange),
         ],
       ),

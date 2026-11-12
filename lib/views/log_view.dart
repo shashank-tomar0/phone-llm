@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import '../core/ui.dart';
 import '../services/app_log_service.dart';
@@ -53,12 +55,12 @@ class _LogViewState extends State<LogView> {
         showBack: true,
         actions: [
           Obx(() => AppBarIcon(
-                icon: Icons.copy_rounded,
+                icon: rip.m_copy_rounded,
                 tooltip: 'Copy important logs',
                 onPressed: _logs.entries.isEmpty ? null : _copy,
               )),
           Obx(() => AppBarIcon(
-                icon: Icons.delete_outline_rounded,
+                icon: rip.m_delete_outline_rounded,
                 tooltip: 'Clear logs',
                 onPressed: _logs.entries.isEmpty ? null : _clear,
               )),
@@ -87,7 +89,7 @@ class _LogViewState extends State<LogView> {
               return Center(
                 child: SingleChildScrollView(
                   child: EmptyState(
-                    icon: Icons.check_rounded,
+                    icon: rip.m_check_rounded,
                     title: f == 'ALL'
                         ? 'No logs yet'
                         : 'No ${label.toLowerCase()}',
@@ -168,7 +170,7 @@ class _LogEntryTileState extends State<_LogEntryTile> {
                   turns: _expanded ? 0.5 : 0,
                   duration: const Duration(milliseconds: 180),
                   child:
-                      Icon(Icons.expand_more_rounded, size: 16, color: t.muted),
+                      ReiconIcon(rip.m_expand_more_rounded, size: 16, color: t.muted),
                 ),
               ]),
             ),

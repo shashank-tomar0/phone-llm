@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -129,7 +131,7 @@ PreferredSizeWidget appScreenBar(
 
 /// Neutral icon button for app bars.
 class AppBarIcon extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String tooltip;
   final VoidCallback? onPressed;
   const AppBarIcon(
@@ -141,7 +143,7 @@ class AppBarIcon extends StatelessWidget {
     return IconButton(
       tooltip: tooltip,
       onPressed: onPressed,
-      icon: Icon(icon, size: 22, color: onPressed == null ? t.faint : t.text),
+      icon: ReiconIcon(icon, size: 22, color: onPressed == null ? t.faint : t.text),
     );
   }
 }
@@ -270,7 +272,7 @@ class AppGroup extends StatelessWidget {
 /// Card with a tappable header (icon, title, live one-line summary, chevron)
 /// that expands to reveal its body. Expansion state survives rebuilds.
 class CollapsibleCard extends StatefulWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final String? summary;
   final Widget child;
@@ -342,7 +344,7 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
                 duration: const Duration(milliseconds: 220),
                 curve: Curves.easeOutCubic,
                 child:
-                    Icon(Icons.expand_more_rounded, size: 22, color: t.faint),
+                    ReiconIcon(rip.m_expand_more_rounded, size: 22, color: t.faint),
               ),
             ]),
           ),
@@ -365,7 +367,7 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
 
 /// Standard row inside an [AppGroup].
 class AppRow extends StatelessWidget {
-  final IconData? icon;
+  final String? icon;
   final Widget? leading;
   final String title;
   final String? subtitle;
@@ -429,10 +431,10 @@ class AppRow extends StatelessWidget {
             ),
             if (trailing != null) ...[const SizedBox(width: 10), trailing!],
             if (selected && trailing == null)
-              Icon(Icons.check_rounded, size: 20, color: t.accent),
+              ReiconIcon(rip.m_check_rounded, size: 20, color: t.accent),
             if (chevron) ...[
               const SizedBox(width: 4),
-              Icon(Icons.chevron_right_rounded, size: 20, color: t.faint),
+              ReiconIcon(rip.m_chevron_right_rounded, size: 20, color: t.faint),
             ],
           ]),
         ),
@@ -443,7 +445,7 @@ class AppRow extends StatelessWidget {
 
 /// Neutral circular icon holder — replaces the old colourful iOS squares.
 class IconBadge extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final double size;
   final Color? color;
   const IconBadge(this.icon, {super.key, this.size = 32, this.color});
@@ -455,7 +457,7 @@ class IconBadge extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(shape: BoxShape.circle, color: t.fill),
-      child: Icon(icon,
+      child: ReiconIcon(icon,
           size: size * 0.53, color: color ?? t.text.withValues(alpha: 0.8)),
     );
   }
@@ -479,7 +481,7 @@ class StatusDot extends StatelessWidget {
 class AppTag extends StatelessWidget {
   final String label;
   final Color? color;
-  final IconData? icon;
+  final String? icon;
   const AppTag(this.label, {super.key, this.color, this.icon});
 
   @override
@@ -494,7 +496,7 @@ class AppTag extends StatelessWidget {
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         if (icon != null) ...[
-          Icon(icon, size: 11, color: fg),
+          ReiconIcon(icon, size: 11, color: fg),
           const SizedBox(width: 3),
         ],
         Text(label,
@@ -656,7 +658,7 @@ class AppSegmented<T> extends StatelessWidget {
 class PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
-  final IconData? icon;
+  final String? icon;
   final bool busy;
   final bool expand;
   const PrimaryButton({
@@ -683,7 +685,7 @@ class PrimaryButton extends StatelessWidget {
               child: CircularProgressIndicator(
                   strokeWidth: 2, color: Colors.white))
         else if (icon != null)
-          Icon(icon, size: 18, color: Colors.white),
+          ReiconIcon(icon, size: 18, color: Colors.white),
         if (busy || icon != null) const SizedBox(width: 8),
         Text(label,
             style: GoogleFonts.inter(
@@ -717,7 +719,7 @@ class PillButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool primary;
   final bool destructive;
-  final IconData? icon;
+  final String? icon;
   const PillButton({
     super.key,
     required this.label,
@@ -754,7 +756,7 @@ class PillButton extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(icon != null ? 10 : 14, 7, 14, 7),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               if (icon != null) ...[
-                Icon(icon, size: 15, color: fg),
+                ReiconIcon(icon, size: 15, color: fg),
                 const SizedBox(width: 5),
               ],
               Text(label,
@@ -770,7 +772,7 @@ class PillButton extends StatelessWidget {
 
 /// Centered empty / zero state.
 class EmptyState extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final String? message;
   final Widget? action;
@@ -803,10 +805,10 @@ class EmptyState extends StatelessWidget {
 /// Inline notice (info / warning / error) — tinted, no heavy borders.
 class AppNotice extends StatelessWidget {
   final String text;
-  final IconData icon;
+  final String icon;
   final Color? color;
   const AppNotice(this.text,
-      {super.key, this.icon = Icons.info_outline_rounded, this.color});
+      {super.key, this.icon = rip.m_info_outline_rounded, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -819,7 +821,7 @@ class AppNotice extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(icon, size: 16, color: c),
+        ReiconIcon(icon, size: 16, color: c),
         const SizedBox(width: 8),
         Expanded(
             child: Text(text,
@@ -999,11 +1001,11 @@ void showToast(
   ToastTone tone = ToastTone.info,
   Duration duration = const Duration(seconds: 3),
 }) {
-  final (IconData icon, Color color) = switch (tone) {
-    ToastTone.success => (Icons.check_circle_rounded, const Color(0xFF30D158)),
-    ToastTone.warning => (Icons.warning_amber_rounded, const Color(0xFFFF9F0A)),
-    ToastTone.error => (Icons.error_rounded, const Color(0xFFFF453A)),
-    ToastTone.info => (Icons.info_rounded, const Color(0xFF8E8E93)),
+  final (String icon, Color color) = switch (tone) {
+    ToastTone.success => (rip.m_check_circle_rounded, const Color(0xFF30D158)),
+    ToastTone.warning => (rip.m_warning_amber_rounded, const Color(0xFFFF9F0A)),
+    ToastTone.error => (rip.m_error_rounded, const Color(0xFFFF453A)),
+    ToastTone.info => (rip.m_info_rounded, const Color(0xFF8E8E93)),
   };
   if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
   Get.snackbar(
@@ -1016,7 +1018,7 @@ void showToast(
     borderRadius: 16,
     margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
     padding: const EdgeInsets.fromLTRB(14, 12, 16, 12),
-    icon: Icon(icon, color: color, size: 22),
+    icon: ReiconIcon(icon, color: color, size: 22),
     shouldIconPulse: false,
     boxShadows: [
       BoxShadow(

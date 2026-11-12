@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/chat_controller.dart';
@@ -180,7 +182,7 @@ class _ChatDrawerState extends State<ChatDrawer> {
               IconButton(
                 tooltip: 'New chat',
                 onPressed: _newChat,
-                icon: Icon(Icons.edit_square, size: 21, color: accent),
+                icon: ReiconIcon(rip.m_edit_square, size: 21, color: accent),
               ),
             ]),
           ),
@@ -202,7 +204,7 @@ class _ChatDrawerState extends State<ChatDrawer> {
                   hintText: 'Search',
                   hintStyle: GoogleFonts.inter(fontSize: 15, color: muted),
                   prefixIcon:
-                      Icon(Icons.search_rounded, size: 19, color: muted),
+                      ReiconIcon(rip.m_search_rounded, size: 19, color: muted),
                   prefixIconConstraints:
                       const BoxConstraints(minWidth: 36, minHeight: 38),
                   suffixIcon: _query.isEmpty
@@ -212,7 +214,7 @@ class _ChatDrawerState extends State<ChatDrawer> {
                             _search.clear();
                             setState(() => _query = '');
                           },
-                          child: Icon(Icons.cancel_rounded,
+                          child: ReiconIcon(rip.m_cancel_rounded,
                               size: 17, color: muted),
                         ),
                   filled: false,
@@ -242,10 +244,10 @@ class _ChatDrawerState extends State<ChatDrawer> {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
                 child: Column(children: [
-                  Icon(
+                  ReiconIcon(
                       _query.isEmpty
-                          ? Icons.chat_bubble_outline_rounded
-                          : Icons.search_off_rounded,
+                          ? rip.m_chat_bubble_outline_rounded
+                          : rip.m_search_off_rounded,
                       size: 28,
                       color: muted.withValues(alpha: 0.6)),
                   const SizedBox(height: 12),

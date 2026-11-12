@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,7 +16,7 @@ class CloudProviderInfo {
   final String id;
   final String name;
   final String description;
-  final IconData icon;
+  final String icon;
   final bool requiresKeyForList;
   final bool supportsFetch;
 
@@ -78,37 +80,37 @@ class CloudModelController extends GetxController {
       id: 'openrouter',
       name: 'OpenRouter',
       description: 'Free model list · OpenAI compatible',
-      icon: Icons.hub_outlined,
+      icon: rip.m_hub_outlined,
     ),
     CloudProviderInfo(
       id: 'openai',
       name: 'OpenAI',
       description: 'Native OpenAI chat models',
-      icon: Icons.auto_awesome,
+      icon: rip.m_auto_awesome,
     ),
     CloudProviderInfo(
       id: 'deepseek',
       name: 'DeepSeek',
       description: 'OpenAI compatible V4 models',
-      icon: Icons.psychology_alt_outlined,
+      icon: rip.m_psychology_alt_outlined,
     ),
     CloudProviderInfo(
       id: 'google',
       name: 'Google Gemini',
       description: 'Gemini native API models',
-      icon: Icons.diamond_outlined,
+      icon: rip.m_diamond_outlined,
     ),
     CloudProviderInfo(
       id: 'nvidia',
       name: 'NVIDIA NIM',
       description: 'OpenAI compatible hosted NIM models',
-      icon: Icons.memory_outlined,
+      icon: rip.m_memory_outlined,
     ),
     CloudProviderInfo(
       id: 'custom',
       name: 'Custom API',
       description: 'Manual OpenAI-compatible endpoint',
-      icon: Icons.tune,
+      icon: rip.m_tune,
       supportsFetch: false,
     ),
   ];

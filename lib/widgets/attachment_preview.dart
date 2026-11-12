@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AttachmentPreview extends StatelessWidget {
@@ -94,8 +96,7 @@ class AttachmentPreview extends StatelessWidget {
                       : Colors.black.withValues(alpha: 0.06),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.close_rounded,
+                child: ReiconIcon(rip.m_close_rounded,
                   size: 14,
                   color: Theme.of(context).hintColor,
                 ),
@@ -121,8 +122,7 @@ class AttachmentPreview extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: image ??
-            Icon(
-              _iconForType(type),
+            ReiconIcon(_iconForType(type),
               color: color,
               size: compact ? 18 : 20,
             ),
@@ -137,7 +137,8 @@ class AttachmentPreview extends StatelessWidget {
         base64Decode(imageBase64!),
         fit: BoxFit.cover,
         gaplessPlayback: true,
-        errorBuilder: (_, __, ___) => const Icon(Icons.broken_image_outlined),
+        errorBuilder: (_, __, ___) =>
+          const ReiconIcon(rip.m_broken_image_outlined, color: Colors.white38),
       );
     }
     if (imagePath != null && imagePath!.isNotEmpty) {
@@ -145,7 +146,8 @@ class AttachmentPreview extends StatelessWidget {
         File(imagePath!),
         fit: BoxFit.cover,
         gaplessPlayback: true,
-        errorBuilder: (_, __, ___) => const Icon(Icons.broken_image_outlined),
+        errorBuilder: (_, __, ___) =>
+          const ReiconIcon(rip.m_broken_image_outlined, color: Colors.white38),
       );
     }
     return null;
@@ -209,18 +211,18 @@ class AttachmentPreview extends StatelessWidget {
     }
   }
 
-  IconData _iconForType(String type) {
+  String _iconForType(String type) {
     switch (type) {
       case 'image':
-        return Icons.image_outlined;
+        return rip.m_image_outlined;
       case 'pdf':
-        return Icons.picture_as_pdf_outlined;
+        return rip.m_picture_as_pdf_outlined;
       case 'audio':
-        return Icons.graphic_eq_rounded;
+        return rip.m_graphic_eq_rounded;
       case 'text':
-        return Icons.description_outlined;
+        return rip.m_description_outlined;
       default:
-        return Icons.insert_drive_file_outlined;
+        return rip.m_insert_drive_file_outlined;
     }
   }
 

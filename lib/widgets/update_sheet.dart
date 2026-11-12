@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +31,7 @@ class UpdateSheet extends StatelessWidget {
 
       return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Row(children: [
-          const IconBadge(Icons.system_update_rounded, size: 44),
+          const IconBadge(rip.m_system_update_rounded, size: 44),
           const SizedBox(width: 12),
           Expanded(
             child:
@@ -91,14 +93,14 @@ class UpdateSheet extends StatelessWidget {
           const AppNotice(
             'Allow PhoneLM to install apps, then come back. '
             'The installer opens automatically.',
-            icon: Icons.lock_open_rounded,
+            icon: rip.m_lock_open_rounded,
           ),
           const SizedBox(height: 12),
         ],
         if (state == UpdateState.error &&
             updates.lastError.value.isNotEmpty) ...[
           AppNotice(updates.lastError.value,
-              icon: Icons.error_outline_rounded, color: t.red),
+              icon: rip.m_error_outline_rounded, color: t.red),
           const SizedBox(height: 12),
         ],
         if (release.apkUrl == null) ...[
@@ -134,7 +136,7 @@ class UpdateSheet extends StatelessWidget {
         ] else ...[
           PrimaryButton(
             label: installing ? 'Opening installer…' : 'Download & install',
-            icon: Icons.download_rounded,
+            icon: rip.m_download_rounded,
             busy: installing,
             onPressed: updates.downloadAndInstall,
           ),

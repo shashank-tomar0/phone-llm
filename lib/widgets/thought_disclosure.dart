@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -135,8 +137,7 @@ class _ThoughtDisclosureState extends State<ThoughtDisclosure>
                   if (!widget.isThinking)
                     Padding(
                       padding: const EdgeInsets.only(right: 6),
-                      child: Icon(
-                        Icons.lightbulb_outline_rounded,
+                      child: ReiconIcon(rip.m_lightbulb_outline_rounded,
                         size: 14,
                         color: muted,
                       ),
@@ -153,8 +154,7 @@ class _ThoughtDisclosureState extends State<ThoughtDisclosure>
                   AnimatedRotation(
                     turns: _expanded ? 0.25 : 0.0,
                     duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.chevron_right_rounded,
+                    child: ReiconIcon(rip.m_chevron_right_rounded,
                       size: 16,
                       color: muted,
                     ),

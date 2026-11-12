@@ -8,10 +8,9 @@ import '../core/reicon_paths.dart';
 class ReiconIcon extends StatelessWidget {
   final String pathData;
   final double size;
-  final Color color;
+  final Color? color;
 
-  const ReiconIcon(this.pathData,
-      {super.key, this.size = 24, required this.color});
+  const ReiconIcon(this.pathData, {super.key, this.size = 24, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +20,8 @@ class ReiconIcon extends StatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.contain,
-        colorFilter: ColorFilter.mode(color, BlendMode.srcIn));
+        colorFilter: color == null
+            ? null
+            : ColorFilter.mode(color!, BlendMode.srcIn));
   }
 }

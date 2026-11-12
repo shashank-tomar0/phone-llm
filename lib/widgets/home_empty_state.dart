@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/chat_controller.dart';
@@ -275,7 +277,7 @@ class _ModelCard extends StatelessWidget {
         state = _ModelState.idle;
       }
 
-      late final IconData icon;
+      late final String icon;
       late final String title;
       late final String meta;
       late final Color dot;
@@ -284,13 +286,13 @@ class _ModelCard extends StatelessWidget {
       switch (state) {
         case _ModelState.cloud:
           final m = settings.selectedCloudModelName;
-          icon = Icons.cloud_outlined;
+          icon = rip.m_cloud_outlined;
           title = m.isEmpty ? 'No model selected' : m;
           meta = providerLabel(settings);
           dot = t.accent;
           action = _ActionChip(t: t, label: 'Change', onTap: _openModels);
         case _ModelState.loading:
-          icon = Icons.memory_rounded;
+          icon = rip.m_memory_rounded;
           title = _prettyModel(inf.loadedModelName.value.isNotEmpty
               ? inf.loadedModelName.value
               : models.lastLoadedModelName);
@@ -299,7 +301,7 @@ class _ModelCard extends StatelessWidget {
         case _ModelState.readyText:
           final runtime =
               inf.loadedModelRuntime.value == 'litert' ? 'LiteRT' : 'GGUF';
-          icon = Icons.memory_rounded;
+          icon = rip.m_memory_rounded;
           title = _prettyModel(inf.loadedModelName.value);
           meta = [
             'Ready',
@@ -313,14 +315,14 @@ class _ModelCard extends StatelessWidget {
           action = _ActionChip(t: t, label: 'Switch', onTap: _openModels);
         case _ModelState.readyImage:
           final backend = img.currentBackend.value;
-          icon = Icons.image_outlined;
+          icon = rip.m_image_outlined;
           title = _prettyModel(img.loadedModelName.value);
           meta =
               'Ready · Image generation · ${backend == Backend.cpu ? 'CPU' : backend.displayName.split(' ').first}';
           dot = t.green;
           action = _ActionChip(t: t, label: 'Switch', onTap: _openModels);
         case _ModelState.noModels:
-          icon = Icons.download_rounded;
+          icon = rip.m_download_rounded;
           title = 'No model on this device';
           meta = 'Download one to chat offline';
           dot = t.orange;
@@ -329,7 +331,7 @@ class _ModelCard extends StatelessWidget {
         case _ModelState.idle:
           final last =
               models.canLoadLastModel ? models.lastLoadedModelName : '';
-          icon = Icons.memory_rounded;
+          icon = rip.m_memory_rounded;
           title = last.isEmpty ? 'No model loaded' : _prettyModel(last);
           meta = last.isEmpty
               ? '${models.downloadedCount} downloaded'
@@ -363,7 +365,7 @@ class _ModelCard extends StatelessWidget {
                     ? Colors.white.withValues(alpha: 0.08)
                     : Colors.black.withValues(alpha: 0.05),
               ),
-              child: Icon(icon, size: 20, color: t.text.withValues(alpha: 0.8)),
+              child: ReiconIcon(icon, size: 20, color: t.text.withValues(alpha: 0.8)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -461,27 +463,27 @@ class _ActionChip extends StatelessWidget {
 // ── Starters ────────────────────────────────────────────────────────────
 
 class _Starter {
-  final IconData icon;
+  final String icon;
   final String label;
   final String prompt;
   const _Starter(this.icon, this.label, this.prompt);
 }
 
 const _textStarters = [
-  _Starter(Icons.lightbulb_outline_rounded, 'Explain quantum computing simply',
+  _Starter(rip.m_lightbulb_outline_rounded, 'Explain quantum computing simply',
       'Explain quantum computing simply, like I\'m new to it.'),
-  _Starter(Icons.mail_outline_rounded, 'Write a polite follow-up email',
+  _Starter(rip.m_mail_outline_rounded, 'Write a polite follow-up email',
       'Write a short, polite follow-up email to someone who hasn\'t replied in a week.'),
-  _Starter(Icons.flight_takeoff_rounded, 'Plan a 3-day trip to Tokyo',
+  _Starter(rip.m_flight_takeoff_rounded, 'Plan a 3-day trip to Tokyo',
       'Plan a relaxed 3-day trip to Tokyo with food and sightseeing.'),
 ];
 
 const _imageStarters = [
-  _Starter(Icons.landscape_outlined, 'A mountain lake at golden hour',
+  _Starter(rip.m_landscape_outlined, 'A mountain lake at golden hour',
       'Mountain lake at golden hour, wide shot, photorealistic'),
-  _Starter(Icons.person_outline_rounded, 'A portrait in soft studio light',
+  _Starter(rip.m_person_outline_rounded, 'A portrait in soft studio light',
       'Portrait of a person, soft studio lighting, 85mm, detailed'),
-  _Starter(Icons.brush_outlined, 'A flat editorial illustration',
+  _Starter(rip.m_brush_outlined, 'A flat editorial illustration',
       'Flat editorial illustration of a city street, muted palette'),
 ];
 
@@ -535,7 +537,7 @@ class _Starters extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(14, 10, 18, 10),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(s.icon, size: 18, color: t.muted),
+                    ReiconIcon(s.icon, size: 18, color: t.muted),
                     const SizedBox(width: 10),
                     Flexible(
                       child: Text(s.label,

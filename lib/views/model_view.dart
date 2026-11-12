@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/cloud_model_controller.dart';
@@ -48,7 +50,7 @@ class ModelView extends GetView<ModelController> {
               return const SizedBox.shrink();
             }
             return _TextAction(
-              icon: Icons.add_rounded,
+              icon: rip.m_add_rounded,
               label: 'Import',
               color: t.accent,
               onTap: controller.isImporting.value
@@ -109,7 +111,7 @@ class ModelView extends GetView<ModelController> {
           controller.isImporting.value || inference.isLoadingModel.value;
       return PillButton(
         label: 'Import file',
-        icon: Icons.file_upload_outlined,
+        icon: rip.m_file_upload_outlined,
         onPressed: busy ? null : () => _showImportSheet(context),
       );
     });
@@ -144,7 +146,7 @@ class ModelView extends GetView<ModelController> {
       subtitle: 'Add .gguf, .litertlm or .safetensors files from your phone.',
       builder: (ctx) => AppGroup(dividerIndent: 60, children: [
         AppRow(
-          icon: Icons.insert_drive_file_outlined,
+          icon: rip.m_insert_drive_file_outlined,
           title: 'Import file',
           subtitle: 'Choose a single model file',
           chevron: true,
@@ -155,7 +157,7 @@ class ModelView extends GetView<ModelController> {
         ),
         if (controller.supportsFolderImport)
           AppRow(
-            icon: Icons.folder_open_rounded,
+            icon: rip.m_folder_open_rounded,
             title: 'Import from folder',
             subtitle: 'Scan a folder and pick the models to add',
             chevron: true,
@@ -190,7 +192,7 @@ class ModelView extends GetView<ModelController> {
 
   Widget _buildEmptyLibrary(BuildContext context) {
     return EmptyState(
-      icon: Icons.download_rounded,
+      icon: rip.m_download_rounded,
       title: 'No models on this phone yet',
       message: 'Download one from Browse, or import a model file.',
       action: Wrap(spacing: 8, children: [
@@ -222,19 +224,19 @@ class ModelView extends GetView<ModelController> {
 
       final String name;
       final String meta;
-      final IconData icon;
+      final String icon;
       if (localImage.isModelLoaded.value) {
         name = localImage.loadedModelName.value;
         meta =
             'Loaded · Image generation · ${localImage.isUsingGpu.value ? 'GPU accelerated' : 'CPU'}';
-        icon = Icons.image_outlined;
+        icon = rip.m_image_outlined;
       } else if (inference.isModelLoaded.value) {
         name = inference.loadedModelName.value;
         final gpu = inference.gpuName.value;
         meta = inference.isGpuAccelerated.value
             ? 'Loaded · GPU${gpu.isEmpty ? '' : ' · $gpu'}'
             : 'Loaded · CPU';
-        icon = Icons.memory_rounded;
+        icon = rip.m_memory_rounded;
       } else {
         return const SizedBox.shrink();
       }
@@ -316,7 +318,7 @@ class ModelView extends GetView<ModelController> {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(14, 11, 6, 11),
                   child: Row(children: [
-                    const IconBadge(Icons.download_rounded, size: 32),
+                    const IconBadge(rip.m_download_rounded, size: 32),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -355,10 +357,10 @@ class ModelView extends GetView<ModelController> {
                               ? controller.cancelExternalDownload()
                               : controller.pauseDownload(dp.filename);
                         },
-                        icon: Icon(
+                        icon: ReiconIcon(
                             controller.canPauseDownloads
-                                ? Icons.pause_rounded
-                                : Icons.close_rounded,
+                                ? rip.m_pause_rounded
+                                : rip.m_close_rounded,
                             size: 20,
                             color: t.muted),
                       ),
@@ -387,7 +389,7 @@ class ModelView extends GetView<ModelController> {
         cloudModels.canSelectModel(providerId) && model.isNotEmpty;
 
     return _ActiveCard(
-      icon: Icons.cloud_outlined,
+      icon: rip.m_cloud_outlined,
       title: hasSelectedModel ? model : 'No online model selected',
       meta: 'Cloud · $providerName',
       dot: hasSelectedModel ? t.accent : t.faint,
@@ -493,8 +495,8 @@ class ModelView extends GetView<ModelController> {
                 children: [
                   IconBadge(
                     isDownload
-                        ? Icons.download_rounded
-                        : Icons.file_upload_outlined,
+                        ? rip.m_download_rounded
+                        : rip.m_file_upload_outlined,
                     size: 36,
                   ),
                   const SizedBox(width: 12),
@@ -516,7 +518,7 @@ class ModelView extends GetView<ModelController> {
                   ),
                   if (controller.externalDownloadId.value != null)
                     _IconAction(
-                      icon: Icons.close_rounded,
+                      icon: rip.m_close_rounded,
                       tooltip: 'Cancel download',
                       destructive: true,
                       onPressed: controller.cancelExternalDownload,
@@ -657,7 +659,7 @@ class ModelView extends GetView<ModelController> {
                 ),
                 const SizedBox(width: 4),
                 _IconAction(
-                  icon: Icons.more_horiz_rounded,
+                  icon: rip.m_more_horiz_rounded,
                   tooltip: 'Provider settings',
                   onPressed: () =>
                       _showProviderActionsSheet(context, cloud, provider),
@@ -763,7 +765,7 @@ class ModelView extends GetView<ModelController> {
               children: [
                 if (!isCustom)
                   AppRow(
-                    icon: Icons.key_outlined,
+                    icon: rip.m_key_outlined,
                     title: configured ? 'Update API key' : 'Add API key',
                     subtitle: 'Required before selecting live models',
                     chevron: true,
@@ -779,7 +781,7 @@ class ModelView extends GetView<ModelController> {
                   ),
                 AppRow(
                   icon:
-                      isCustom ? Icons.tune_rounded : Icons.smart_toy_outlined,
+                      isCustom ? rip.m_tune_rounded : rip.m_smart_toy_outlined,
                   title: isCustom ? 'Configure and select' : 'Select model',
                   subtitle: isCustom
                       ? 'Set base URL, key, and model ID'
@@ -832,14 +834,14 @@ class ModelView extends GetView<ModelController> {
                 decoration: _sheetInput(
                   ctx,
                   hint: 'Paste ${provider.name} key',
-                  prefix: Icon(Icons.key_outlined, size: 18, color: t.muted),
+                  prefix: ReiconIcon(rip.m_key_outlined, size: 18, color: t.muted),
                   suffix: IconButton(
                     tooltip: obscureKey.value ? 'Show API key' : 'Hide API key',
                     onPressed: () => obscureKey.value = !obscureKey.value,
-                    icon: Icon(
+                    icon: ReiconIcon(
                       obscureKey.value
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
+                          ? rip.m_visibility_outlined
+                          : rip.m_visibility_off_outlined,
                       size: 20,
                       color: t.muted,
                     ),
@@ -931,7 +933,7 @@ class ModelView extends GetView<ModelController> {
                           borderRadius: BorderRadius.circular(12),
                           dropdownColor:
                               t.isDark ? const Color(0xFF2C2C2E) : Colors.white,
-                          icon: Icon(Icons.expand_more_rounded,
+                          icon: ReiconIcon(rip.m_expand_more_rounded,
                               color: t.muted, size: 20),
                           style: t.body,
                           decoration:
@@ -957,7 +959,7 @@ class ModelView extends GetView<ModelController> {
                       ),
                       const SizedBox(width: 8),
                       _SquareIconButton(
-                        icon: Icons.add_rounded,
+                        icon: rip.m_add_rounded,
                         tooltip: 'Add another provider',
                         onTap: cloud.beginNewCustomProfile,
                       ),
@@ -1012,10 +1014,10 @@ class ModelView extends GetView<ModelController> {
                           : 'Hide API key',
                       onPressed: () =>
                           obscureCustomKey.value = !obscureCustomKey.value,
-                      icon: Icon(
+                      icon: ReiconIcon(
                         obscureCustomKey.value
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
+                            ? rip.m_visibility_outlined
+                            : rip.m_visibility_off_outlined,
                         size: 20,
                         color: t.muted,
                       ),
@@ -1161,7 +1163,7 @@ class ModelView extends GetView<ModelController> {
                     ctx,
                     hint: 'Search models',
                     prefix:
-                        Icon(Icons.search_rounded, size: 20, color: t.muted),
+                        ReiconIcon(rip.m_search_rounded, size: 20, color: t.muted),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -1181,8 +1183,8 @@ class ModelView extends GetView<ModelController> {
                     if (provider.id == 'openrouter' || freeModelCount > 0)
                       _TextAction(
                         icon: freeFirst
-                            ? Icons.check_circle_rounded
-                            : Icons.local_offer_outlined,
+                            ? rip.m_check_circle_rounded
+                            : rip.m_local_offer_outlined,
                         label: freeModelCount == 0
                             ? 'Free'
                             : 'Free first ($freeModelCount)',
@@ -1192,7 +1194,7 @@ class ModelView extends GetView<ModelController> {
                             : () => cloud.toggleFreeFirst(provider.id),
                       ),
                     _TextAction(
-                      icon: Icons.refresh_rounded,
+                      icon: rip.m_refresh_rounded,
                       label: 'Refresh',
                       busy: isLoading,
                       onTap: isLoading || !canFetch
@@ -1229,7 +1231,7 @@ class ModelView extends GetView<ModelController> {
     return const Center(
       child: SingleChildScrollView(
         child: EmptyState(
-          icon: Icons.inbox_outlined,
+          icon: rip.m_inbox_outlined,
           title: 'No models loaded',
           message:
               'Add an API key to update the live list, or use a custom model ID.',
@@ -1367,7 +1369,7 @@ class ModelView extends GetView<ModelController> {
               if (isActive)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(Icons.check_rounded, size: 20, color: t.accent),
+                  child: ReiconIcon(rip.m_check_rounded, size: 20, color: t.accent),
                 )
               else
                 PillButton(
@@ -1384,7 +1386,7 @@ class ModelView extends GetView<ModelController> {
   Widget _buildErrorBox(BuildContext context, String error) {
     return AppNotice(
       error,
-      icon: Icons.error_outline_rounded,
+      icon: rip.m_error_outline_rounded,
       color: AppTokens.of(context).red,
     );
   }
@@ -1398,11 +1400,11 @@ class ModelView extends GetView<ModelController> {
     return [
       if (model.recommendedFor.contains(filter))
         AppTag('Recommended',
-            icon: Icons.star_rounded, color: AppTokens.of(context).accent),
+            icon: rip.m_star_rounded, color: AppTokens.of(context).accent),
       if (controller.isVisionModel(model))
-        const AppTag('Vision', icon: Icons.visibility_outlined),
+        const AppTag('Vision', icon: rip.m_visibility_outlined),
       if (controller.isImageModel(model))
-        const AppTag('Image', icon: Icons.image_outlined),
+        const AppTag('Image', icon: rip.m_image_outlined),
       if (controller.isNpuModel(model)) const AppTag('NPU'),
       if (controller.isUncensoredModel(model)) const AppTag('Uncensored'),
       if (model.isImported) const AppTag('Imported'),
@@ -1433,7 +1435,7 @@ class ModelView extends GetView<ModelController> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.sd_storage_outlined, size: 18, color: t.muted),
+                  ReiconIcon(rip.m_sd_storage_outlined, size: 18, color: t.muted),
                   const SizedBox(width: 10),
                   Expanded(child: Text('Size', style: t.body)),
                   Text(
@@ -1446,7 +1448,7 @@ class ModelView extends GetView<ModelController> {
             const SizedBox(height: 12),
             AppNotice(
               'Wi-Fi is recommended. Keep the app open while it downloads.',
-              icon: Icons.wifi_rounded,
+              icon: rip.m_wifi_rounded,
               color: t.orange,
             ),
             const SizedBox(height: 20),
@@ -1550,14 +1552,14 @@ class ModelView extends GetView<ModelController> {
           );
         } else {
           primaryAction = Row(mainAxisSize: MainAxisSize.min, children: [
-            Icon(Icons.check_rounded, size: 15, color: t.muted),
+            ReiconIcon(rip.m_check_rounded, size: 15, color: t.muted),
             const SizedBox(width: 4),
             Text('On phone', style: t.small),
           ]);
         }
       } else {
         primaryAction = _RoundIconButton(
-          icon: Icons.arrow_downward_rounded,
+          icon: rip.m_arrow_downward_rounded,
           tooltip: 'Download',
           onPressed:
               disableActions ? null : () => _confirmDownload(context, model),
@@ -1568,10 +1570,10 @@ class ModelView extends GetView<ModelController> {
           : null;
 
       // Secondary actions live in the ⋯ sheet.
-      final secondary = <(IconData, String, bool, VoidCallback)>[
+      final secondary = <(String, String, bool, VoidCallback)>[
         if (!isCurrentlyDownloading && isDownloaded)
           (
-            Icons.save_alt_rounded,
+            rip.m_save_alt_rounded,
             model.hasVisionProjector
                 ? 'Save to Downloads folder (with vision file)'
                 : 'Save to Downloads folder',
@@ -1580,7 +1582,7 @@ class ModelView extends GetView<ModelController> {
           ),
         if (!isCurrentlyDownloading && isDownloaded && !isActive)
           (
-            Icons.delete_outline_rounded,
+            rip.m_delete_outline_rounded,
             'Delete model',
             true,
             () => _confirmDeleteModel(context, actualFilename),
@@ -1589,14 +1591,14 @@ class ModelView extends GetView<ModelController> {
             !isDownloaded &&
             model.url.trim().isNotEmpty)
           (
-            Icons.save_alt_rounded,
+            rip.m_save_alt_rounded,
             'Save to phone Downloads folder',
             false,
             () => _confirmDownload(context, model, isToDownloadsFolder: true),
           ),
         if (!isCurrentlyDownloading && !isDownloaded && model.isCustom)
           (
-            Icons.playlist_remove_rounded,
+            rip.m_playlist_remove_rounded,
             'Remove from list',
             true,
             () => _confirmRemoveCustom(context, model),
@@ -1707,7 +1709,7 @@ class ModelView extends GetView<ModelController> {
   }
 
   _TextAction _sortAction() => _TextAction(
-        icon: Icons.swap_vert_rounded,
+        icon: rip.m_swap_vert_rounded,
         label: controller.sortSmallestFirst.value ? 'By size' : 'By name',
         onTap: controller.toggleSort,
       );
@@ -1762,7 +1764,7 @@ class ModelView extends GetView<ModelController> {
     if (models.isEmpty) {
       return [
         const EmptyState(
-            icon: Icons.search_off_rounded,
+            icon: rip.m_search_off_rounded,
             title: 'No models here yet',
             message: 'Try another type.'),
       ];
@@ -1829,10 +1831,10 @@ class ModelView extends GetView<ModelController> {
       if (downloading) {
         action = _DownloadRing(filename: model.filename);
       } else if (downloaded) {
-        action = Icon(Icons.check_circle_rounded, size: 22, color: t.green);
+        action = ReiconIcon(rip.m_check_circle_rounded, size: 22, color: t.green);
       } else {
         action = _RoundIconButton(
-          icon: Icons.arrow_downward_rounded,
+          icon: rip.m_arrow_downward_rounded,
           tooltip: 'Download',
           onPressed: busy ? null : () => _confirmDownload(context, model),
         );
@@ -1932,7 +1934,7 @@ class ModelView extends GetView<ModelController> {
     BuildContext context,
     AiModel model,
     String meta,
-    List<(IconData, String, bool, VoidCallback)> actions,
+    List<(String, String, bool, VoidCallback)> actions,
     bool disabled,
     Widget? primaryAction, {
     VoidCallback? onLoad,
@@ -1958,7 +1960,7 @@ class ModelView extends GetView<ModelController> {
               const SizedBox(height: 18),
               PrimaryButton(
                 label: 'Load model',
-                icon: Icons.play_arrow_rounded,
+                icon: rip.m_play_arrow_rounded,
                 onPressed: () {
                   Navigator.pop(ctx);
                   onLoad();
@@ -1969,7 +1971,7 @@ class ModelView extends GetView<ModelController> {
               const SizedBox(height: 18),
               PrimaryButton(
                 label: 'Download',
-                icon: Icons.arrow_downward_rounded,
+                icon: rip.m_arrow_downward_rounded,
                 onPressed: () {
                   Navigator.pop(ctx);
                   _confirmDownload(context, model);
@@ -2023,13 +2025,13 @@ class ModelView extends GetView<ModelController> {
                   : 'Supports images. Download its vision file'
                       '${size.isEmpty ? '' : ' ($size)'} to use them; '
                       'text chat works without it.',
-              icon: Icons.visibility_outlined,
+              icon: rip.m_visibility_outlined,
             ),
             if (!downloading) ...[
               const SizedBox(height: 10),
               PillButton(
                 label: 'Download vision file',
-                icon: Icons.download_rounded,
+                icon: rip.m_download_rounded,
                 primary: true,
                 onPressed: () => controller.downloadVisionFile(model),
               ),
@@ -2059,7 +2061,7 @@ class ModelView extends GetView<ModelController> {
 
 /// Calm summary card for the model currently in use (mirrors the home card).
 class _ActiveCard extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final String meta;
   final Color dot;
@@ -2184,7 +2186,7 @@ class _SoftButton extends StatelessWidget {
 
 /// Small round icon button (download) for list rows.
 class _RoundIconButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String tooltip;
   final VoidCallback? onPressed;
   const _RoundIconButton(
@@ -2206,7 +2208,7 @@ class _RoundIconButton extends StatelessWidget {
             child: SizedBox(
               width: 34,
               height: 34,
-              child: Icon(icon, size: 18, color: t.text.withValues(alpha: 0.8)),
+              child: ReiconIcon(icon, size: 18, color: t.text.withValues(alpha: 0.8)),
             ),
           ),
         ),
@@ -2218,7 +2220,7 @@ class _RoundIconButton extends StatelessWidget {
 /// Small muted text button (sort toggle, refresh, filters).
 class _TextAction extends StatelessWidget {
   final String label;
-  final IconData? icon;
+  final String? icon;
   final VoidCallback? onTap;
   final Color? color;
   final bool busy;
@@ -2252,7 +2254,7 @@ class _TextAction extends StatelessWidget {
                 child: CircularProgressIndicator(strokeWidth: 1.6, color: fg),
               )
             else if (icon != null)
-              Icon(icon, size: 15, color: fg),
+              ReiconIcon(icon, size: 15, color: fg),
             if (busy || icon != null) const SizedBox(width: 5),
             Text(
               label,
@@ -2272,7 +2274,7 @@ class _TextAction extends StatelessWidget {
 
 /// Compact round icon button for secondary row actions.
 class _IconAction extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String tooltip;
   final VoidCallback? onPressed;
   final bool destructive;
@@ -2305,7 +2307,7 @@ class _IconAction extends StatelessWidget {
           child: SizedBox(
             width: 36,
             height: 36,
-            child: Icon(icon, size: 19, color: color),
+            child: ReiconIcon(icon, size: 19, color: color),
           ),
         ),
       ),
@@ -2315,7 +2317,7 @@ class _IconAction extends StatelessWidget {
 
 /// Square neutral icon button that matches the height of a text field.
 class _SquareIconButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String tooltip;
   final VoidCallback? onTap;
 
@@ -2340,7 +2342,7 @@ class _SquareIconButton extends StatelessWidget {
             width: 46,
             height: 46,
             child: Center(
-              child: Icon(icon,
+              child: ReiconIcon(icon,
                   size: 20,
                   color:
                       onTap == null ? t.faint : t.text.withValues(alpha: 0.8)),
@@ -2412,7 +2414,7 @@ class _FolderImportListState extends State<_FolderImportList> {
         label: picked.isEmpty
             ? 'Nothing selected'
             : 'Import ${picked.length} · ${_size(total)}',
-        icon: Icons.download_rounded,
+        icon: rip.m_download_rounded,
         onPressed: picked.isEmpty ? null : () => Navigator.pop(context, picked),
       ),
       const SizedBox(height: 8),

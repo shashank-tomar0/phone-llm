@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../services/download_service.dart';
@@ -1042,15 +1044,15 @@ class ModelController extends GetxController {
                     ? 'This model is already loaded. It will be unloaded and '
                         'loaded again.'
                     : '$loadedName is loaded. It will be unloaded first.',
-                icon: Icons.memory_rounded,
+                icon: rip.m_memory_rounded,
               ),
             ],
             const SizedBox(height: 12),
             AppNotice(
               warning,
               icon: warningSerious
-                  ? Icons.warning_amber_rounded
-                  : Icons.info_outline_rounded,
+                  ? rip.m_warning_amber_rounded
+                  : rip.m_info_outline_rounded,
               color: warningSerious ? t.orange : null,
             ),
             if (missingChatTemplate) ...[
@@ -1060,7 +1062,7 @@ class ModelController extends GetxController {
                 'base model. Base models continue text instead of answering '
                 '(you will get filler like "great job on the solution!"). '
                 'Download an instruct/chat version for proper replies.',
-                icon: Icons.psychology_alt_rounded,
+                icon: rip.m_psychology_alt_rounded,
                 color: t.orange,
               ),
             ],
@@ -1572,18 +1574,18 @@ class ModelController extends GetxController {
               const SectionHeader('Troubleshooting tips',
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 10)),
               if (isCluster) ...[
-                _buildTipRow(ctx, Icons.hub_outlined,
+                _buildTipRow(ctx, rip.m_hub_outlined,
                     'On each worker, open PhoneLM > Phone cluster and check that Worker is on and shows its QR code.'),
-                _buildTipRow(ctx, Icons.wifi_rounded,
+                _buildTipRow(ctx, rip.m_wifi_rounded,
                     'Keep every device on the same Wi-Fi. iPads must keep PhoneLM open.'),
               ] else ...[
-                _buildTipRow(ctx, Icons.delete_outline_rounded,
+                _buildTipRow(ctx, rip.m_delete_outline_rounded,
                     'Delete the model and try redownloading it completely.'),
-                _buildTipRow(ctx, Icons.memory_rounded,
+                _buildTipRow(ctx, rip.m_memory_rounded,
                     'Ensure your device has at least 2-3 GB of free RAM.'),
               ],
               if (showLiteRtTip)
-                _buildTipRow(ctx, Icons.tune_rounded,
+                _buildTipRow(ctx, rip.m_tune_rounded,
                     'Double check if this LiteRT-LM file matches your architecture.'),
               const SizedBox(height: 4),
               Align(
@@ -1604,10 +1606,10 @@ class ModelController extends GetxController {
                           style: t.label.copyWith(color: t.text),
                         ),
                         const SizedBox(width: 2),
-                        Icon(
+                        ReiconIcon(
                           showDetails
-                              ? Icons.keyboard_arrow_up_rounded
-                              : Icons.keyboard_arrow_down_rounded,
+                              ? rip.m_keyboard_arrow_up_rounded
+                              : rip.m_keyboard_arrow_down_rounded,
                           size: 18,
                           color: t.muted,
                         ),
@@ -1652,7 +1654,7 @@ class ModelController extends GetxController {
     );
   }
 
-  Widget _buildTipRow(BuildContext context, IconData icon, String text) {
+  Widget _buildTipRow(BuildContext context, String icon, String text) {
     final t = AppTokens.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -1661,7 +1663,7 @@ class ModelController extends GetxController {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 1),
-            child: Icon(icon, size: 16, color: t.muted),
+            child: ReiconIcon(icon, size: 16, color: t.muted),
           ),
           const SizedBox(width: 10),
           Expanded(

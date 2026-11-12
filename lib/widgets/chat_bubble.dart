@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/reicon_paths.dart' as rip;
+import '../widgets/reicon_icon.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,7 +62,7 @@ class ChatBubble extends StatelessWidget {
                       height: 120,
                       color: _userFill(isDark),
                       child: const Center(
-                          child: Icon(Icons.broken_image_rounded, size: 24)),
+                          child: ReiconIcon(rip.m_broken_image_rounded, size: 24)),
                     ),
                   ),
                 ),
@@ -287,7 +289,7 @@ class ChatBubble extends StatelessWidget {
                           ? const Color(0xFF1C1C1E)
                           : const Color(0xFFF2F2F7),
                       child: const Center(
-                          child: Icon(Icons.broken_image_rounded, size: 28)),
+                          child: ReiconIcon(rip.m_broken_image_rounded, size: 28, color: Colors.white38)),
                     ),
                   ),
                   // Time elapsed overlay
@@ -316,7 +318,7 @@ class ChatBubble extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.timer_outlined,
+                            const ReiconIcon(rip.m_timer_outlined,
                                 size: 10, color: Colors.white),
                             const SizedBox(width: 4),
                             Text(
@@ -372,8 +374,8 @@ class _CopyButtonState extends State<_CopyButton> {
           padding: const EdgeInsets.all(6),
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
-            child: Icon(
-              _copied ? Icons.check_rounded : Icons.content_copy_rounded,
+            child: ReiconIcon(
+              _copied ? rip.m_check_rounded : rip.m_content_copy_rounded,
               key: ValueKey(_copied),
               size: 16,
               color: widget.color,
