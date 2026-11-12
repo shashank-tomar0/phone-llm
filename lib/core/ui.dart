@@ -118,10 +118,10 @@ PreferredSizeWidget appScreenBar(
     iconTheme: IconThemeData(color: t.text),
     titleSpacing: leading == null && !showBack ? 20 : 0,
     title: Text(title,
-        style: GoogleFonts.inter(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.6,
+        style: TextStyle(
+            fontFamily: 'Ndot57',
+            fontSize: 20,
+            letterSpacing: 0.5,
             color: t.text)),
     actions: [...?actions, const SizedBox(width: 6)],
   );
