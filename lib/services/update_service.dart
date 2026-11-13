@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'app_log_service.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../core/constants.dart';
@@ -87,12 +88,29 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
     super.onClose();
   }
 
+
+  /// True when this install came from Google Play. Play policy forbids
+  /// self-updating from GitHub while distributed on Play, so the in-app
+  /// updater stays off there (Play delivers updates itself).
+  bool? _installedFromPlay;
+  Future<bool> _isPlayInstall() async {
+    if (_installedFromPlay != null) return _installedFromPlay!;
+    try {
+      final src = await _channel.invokeMethod<String>('installSource');
+      _installedFromPlay = src == 'com.android.vending';
+    } catch (_) {
+      _installedFromPlay = false;
+    }
+    return _installedFromPlay!;
+  }
+
   Future<void> _start() async {
     try {
       currentVersion.value = (await PackageInfo.fromPlatform()).version;
     } catch (_) {}
     unawaited(_cleanupOldApks());
     if (!autoCheck.value) return;
+    if (await _isPlayInstall()) return;
     await Future.delayed(const Duration(seconds: 5));
     // Check quietly on every launch so Settings shows the right state, but
     // pop the sheet up at most once a day.
@@ -124,6 +142,13 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
   /// installed version. A manual check reports the result with a toast.
   Future<AppRelease?> checkForUpdate({bool manual = false}) async {
     if (!isSupported || state.value == UpdateState.checking) return null;
+    if (await _isPlayInstall()) {
+      if (manual) {
+        Get.find<AppLogService>().info(
+            'Play install — updates come from Google Play');
+      }
+      return null;
+    }
     if (state.value == UpdateState.downloading) return availableUpdate.value;
     state.value = UpdateState.checking;
     try {

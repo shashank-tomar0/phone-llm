@@ -41,7 +41,12 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         importChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, importChannelName)
         importChannel?.setMethodCallHandler { call, result ->
-            when (call.method) {
+            when (call.method) {                "installSource" -> {
+                    val installer = try {
+                        packageManager.getInstallerPackageName(packageName)
+                    } catch (_: Exception) { null }
+                    result.success(installer ?: "sideload")
+                }
                 "pickAndImportModel" -> {
                     if (pendingImportResult != null) {
                         result.error("IMPORT_BUSY", "Another model import is already running.", null)

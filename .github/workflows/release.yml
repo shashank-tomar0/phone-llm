@@ -49,8 +49,13 @@ jobs:
       - name: Build release APK
         run: flutter build apk --release --split-per-abi
 
+      - name: Build release App Bundle (Play Store)
+        run: flutter build appbundle --release
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/app/outputs/flutter-apk/*.apk
+          files: |
+            build/app/outputs/flutter-apk/*.apk
+            build/app/outputs/bundle/release/app-release.aab
           generate_release_notes: true
