@@ -453,12 +453,15 @@ class IconBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppTokens.of(context);
+    // Reicon glyphs fill the full 24px grid (Material icons carry ~2px
+    // padding), so use a smaller ratio than the old Material scale to keep
+    // the same visual footprint inside the circle.
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(shape: BoxShape.circle, color: t.fill),
       child: ReiconIcon(icon,
-          size: size * 0.53, color: color ?? t.text.withValues(alpha: 0.8)),
+          size: size * 0.44, color: color ?? t.text.withValues(alpha: 0.8)),
     );
   }
 }
