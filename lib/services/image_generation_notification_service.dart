@@ -1,14 +1,15 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// Progress notifications for on-device image generation.
+///
+/// Generation runs in the app's own isolate while it is on screen; these
+/// notifications simply mirror its progress. No foreground service is used,
+/// so backgrounded generation is not kept alive by the OS.
 class ImageGenerationNotificationService {
   static const int _progressNotificationId = 4201;
-  static const int _foregroundNotificationId = 4202;
   static const String _channelId = 'image_generation_progress';
   static const String _channelName = 'Image generation';
 
@@ -19,12 +20,7 @@ class ImageGenerationNotificationService {
   Future<void> init() async {
     if (_initialized) return;
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const darwin = DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-    const settings = InitializationSettings(android: android, iOS: darwin);
+    const settings = InitializationSettings(android: android);
     await _notifications.initialize(settings);
     await _notifications
         .resolvePlatformSpecificImplementation<
@@ -40,25 +36,6 @@ class ImageGenerationNotificationService {
     _initialized = true;
   }
 
-  Future<void> configureBackgroundService() async {
-    if (!Platform.isAndroid) return;
-    await FlutterBackgroundService().configure(
-      androidConfiguration: AndroidConfiguration(
-        onStart: imageGenerationBackgroundStart,
-        autoStart: false,
-        autoStartOnBoot: false,
-        isForegroundMode: true,
-        notificationChannelId: _channelId,
-        initialNotificationTitle: 'Image generation running',
-        initialNotificationContent:
-            'You can leave the app. We will notify you when it finishes.',
-        foregroundServiceNotificationId: _foregroundNotificationId,
-        foregroundServiceTypes: const [AndroidForegroundType.dataSync],
-      ),
-      iosConfiguration: IosConfiguration(autoStart: false),
-    );
-  }
-
   Future<void> ensurePermission() async {
     if (!Platform.isAndroid) return;
     await _notifications
@@ -66,7 +43,6 @@ class ImageGenerationNotificationService {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
     await Permission.notification.request();
-    await Permission.ignoreBatteryOptimizations.request();
   }
 
   Future<void> start({
@@ -78,13 +54,6 @@ class ImageGenerationNotificationService {
     if (!Platform.isAndroid) return;
     await init();
     await ensurePermission();
-    final details =
-        '$backend · $sizeLabel · $steps ${steps == 1 ? "step" : "steps"}';
-    final service = FlutterBackgroundService();
-    if (!await service.isRunning()) {
-      await service.startService();
-    }
-    service.invoke('progress', {'content': details});
     await _showProgress(
       title: 'Image generation running',
       body: '0% · Step 0 of $steps',
@@ -107,7 +76,6 @@ class ImageGenerationNotificationService {
     final body = total > 0
         ? '$percent% · Step $step of $total$elapsed$eta'
         : 'Working$elapsed';
-    FlutterBackgroundService().invoke('progress', {'content': body});
     await _showProgress(
       title: 'Image generation running',
       body: body,
@@ -119,7 +87,6 @@ class ImageGenerationNotificationService {
 
   Future<void> decoding() async {
     if (!Platform.isAndroid) return;
-    FlutterBackgroundService().invoke('progress', {'content': 'Decoding image...'});
     await _showProgress(
       title: 'Finishing image',
       body: 'Decoding image...',
@@ -146,7 +113,7 @@ class ImageGenerationNotificationService {
         ),
       ),
     );
-    FlutterBackgroundService().invoke('stopService');
+    await _notifications.cancel(_progressNotificationId);
   }
 
   Future<void> failed() async {
@@ -166,14 +133,11 @@ class ImageGenerationNotificationService {
         ),
       ),
     );
-    FlutterBackgroundService().invoke('stopService');
   }
 
   Future<void> cancel() async {
     if (!Platform.isAndroid) return;
     await _notifications.cancel(_progressNotificationId);
-    await _notifications.cancel(_foregroundNotificationId);
-    FlutterBackgroundService().invoke('stopService');
   }
 
   Future<void> _showProgress({
@@ -184,7 +148,7 @@ class ImageGenerationNotificationService {
     required bool indeterminate,
   }) async {
     await _notifications.show(
-      _foregroundNotificationId,
+      _progressNotificationId,
       title,
       body,
       NotificationDetails(
@@ -220,25 +184,4 @@ class ImageGenerationNotificationService {
     final rest = seconds % 60;
     return rest == 0 ? '${minutes}m' : '${minutes}m ${rest}s';
   }
-}
-
-@pragma('vm:entry-point')
-void imageGenerationBackgroundStart(ServiceInstance service) async {
-  DartPluginRegistrant.ensureInitialized();
-
-  if (service is AndroidServiceInstance) {
-    await service.setAsForegroundService();
-    service.on('progress').listen((event) {
-      final content = event?['content'] as String? ??
-          'You can leave the app. We will notify you when it finishes.';
-      service.setForegroundNotificationInfo(
-        title: 'Image generation running',
-        content: content,
-      );
-    });
-  }
-
-  service.on('stopService').listen((event) {
-    service.stopSelf();
-  });
 }
