@@ -6,7 +6,7 @@ import '../core/reicon_paths.dart';
 /// Renders Reicon (https://reicon.dev) SVG path data at [size], tinted with
 /// [color]. Mirrors the Icon widget's role in the bottom navigation bar.
 class ReiconIcon extends StatelessWidget {
-  final String pathData;
+  final String? pathData;
   final double size;
   final Color? color;
 
@@ -14,8 +14,10 @@ class ReiconIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final data = pathData;
+    if (data == null || data.isEmpty) return const SizedBox.shrink();
     final svg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" '
-        'height="24" viewBox="0 0 24 24" fill="none">$pathData</svg>';
+        'height="24" viewBox="0 0 24 24" fill="none">$data</svg>';
     return SvgPicture.string(svg,
         width: size,
         height: size,
