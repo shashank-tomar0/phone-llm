@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.content.ContextCompat
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -70,6 +71,10 @@ class LlamaFlutterAndroidPlugin : FlutterPlugin, LlamaHostApi, ActivityAware {
 
         scope.launch {
             try {
+                // Start foreground service for long-running task
+                val intent = Intent(context, InferenceService::class.java)
+                ContextCompat.startForegroundService(context, intent)
+
                 // Load model with progress callback
                 nativeLoadModel(
                     config.modelPath,
@@ -214,7 +219,11 @@ class LlamaFlutterAndroidPlugin : FlutterPlugin, LlamaHostApi, ActivityAware {
                     nativeFreeModel()
                     isModelLoaded.set(false)
                 }
-
+                
+                // Stop foreground service
+                val intent = Intent(context, InferenceService::class.java)
+                context.stopService(intent)
+                
                 withContext(Dispatchers.Main) {
                     callback(Result.success(Unit))
                 }

@@ -85,13 +85,7 @@ class ClusterWorkerService : Service() {
             shutdown()
             return START_NOT_STICKY
         }
-        try {
-            startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
-        } catch (e: Exception) {
-            // No FGS type is declared (Play policy), so Android 14+ refuses
-            // the foreground promotion. Keep serving while the app binds us.
-            Log.w(TAG, "startForeground unavailable, running bound only", e)
-        }
+        startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
         if (running) return START_NOT_STICKY
 
         running = true
