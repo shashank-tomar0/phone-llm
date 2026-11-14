@@ -16,7 +16,6 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
-import androidx.core.content.ContextCompat
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -74,7 +73,7 @@ class ClusterChannel(
                     .putExtra(ClusterWorkerService.EXTRA_PORT,
                         call.argument<Int>("port") ?: ClusterWorkerService.DEFAULT_PORT)
                     .putExtra(ClusterWorkerService.EXTRA_THREADS, call.argument<Int>("threads") ?: 0)
-                ContextCompat.startForegroundService(context, intent)
+                context.startService(intent)
                 result.success(null)
             }
             "stopWorker" -> {
