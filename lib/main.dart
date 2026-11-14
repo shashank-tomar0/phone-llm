@@ -118,6 +118,7 @@ void main() {
     final imageNotifications = Get.put(ImageGenerationNotificationService());
     try {
       await imageNotifications.init();
+      await imageNotifications.configureBackgroundService();
     } catch (e) {
       appLog.error('[Notifications] Init failed', details: e);
     }

@@ -1,7 +1,8 @@
 name: phonellm
 description: AI Chat — Local/Cloud LLM Assistant
 publish_to: "none"
-version: 1.0.22+22
+version: 1.0.23+23
+version: 1.0.23+23
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -59,6 +60,7 @@ dependencies:
   intl: ^0.19.0
 
   # Background / Boot Persistence
+  flutter_background_service: ^5.0.5
   flutter_local_notifications: ^17.0.0
   file_picker: ^11.0.2
   flutter_inappwebview: ^6.1.5
