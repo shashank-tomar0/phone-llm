@@ -16,6 +16,8 @@ import android.os.Looper
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.OpenableColumns
+import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -26,6 +28,12 @@ import java.util.concurrent.ConcurrentHashMap
 import org.json.JSONObject
 
 class MainActivity : FlutterActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // Required for Android 15+ (SDK 35) edge-to-edge rendering.
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
+    }
+
     private val importChannelName = "com.aichat.ai_chat/model_import"
     private val importRequestCode = 4207
     private val folderRequestCode = 4208
