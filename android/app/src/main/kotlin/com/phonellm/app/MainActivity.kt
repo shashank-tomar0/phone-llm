@@ -17,7 +17,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.OpenableColumns
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.EdgeToEdge
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -30,7 +30,7 @@ import org.json.JSONObject
 class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Required for Android 15+ (SDK 35) edge-to-edge rendering.
-        enableEdgeToEdge()
+        EdgeToEdge.enable(this)
         super.onCreate(savedInstanceState)
     }
 
