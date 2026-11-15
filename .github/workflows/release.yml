@@ -52,6 +52,11 @@ jobs:
       - name: Build release App Bundle (Play Store)
         run: flutter build appbundle --release
 
+      - name: Upload deobfuscation mapping
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/app/outputs/mapping/release/mapping.txt
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
