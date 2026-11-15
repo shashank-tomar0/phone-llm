@@ -313,13 +313,31 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
       unawaited(_installDownloaded(filename));
     } else if (status.startsWith('Update failed')) {
       _downloadId = null;
-      _fail('The download failed. Try again.');
+      _fail(_describeDownloadFailure(status));
     } else if (status == 'Update cancelled') {
       _downloadId = null;
       if (state.value == UpdateState.downloading) {
         state.value = UpdateState.idle;
       }
     }
+  }
+
+  /// DownloadManager reason codes (COLUMN_REASON) mapped to actions the
+  /// user can take. Emitted by the native side as "Update failed: <code>".
+  static String _describeDownloadFailure(String status) {
+    final code = int.tryParse(status.split(':').last.trim());
+    return switch (code) {
+      1001 => 'Storage error while saving the update.',
+      1002 => 'The download server rejected the request. Try again later.',
+      1003 => 'Connection dropped during the download. Try again.',
+      1004 => 'Network error. Switch networks and try again.',
+      1005 => 'Not enough storage space on your phone. Free some space and try again.',
+      1006 => 'Storage is not available. Reinsert or check your storage.',
+      1007 => 'The download could not resume. Start it again.',
+      1008 => 'A file conflict occurred. Start the download again.',
+      1010 => 'The download was blocked by your network or device policy.',
+      _ => 'The download failed. Try again.',
+    };
   }
 
   Future<void> _installDownloaded(String filename) async {
