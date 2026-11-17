@@ -2,7 +2,7 @@
 
 A cross-platform AI chat client built with Flutter. Run GGUF models directly on your phone with GPU-accelerated (Vulkan) inference, with no internet needed after download, or switch to cloud APIs (OpenAI, Anthropic, Gemini, Kimi) when you want more power. Everything local runs on the device: the model, the conversation, the generated images.
 
-![Architecture](docs/architecture-excalidraw.png)
+![Architecture](docs/architecture-dark.png)
 
 ## What It Does
 
